@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Borrowing Requests</title>
+  <link rel="icon" type="image/png" href="pictures/Logo.png">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="header-left">
+      <span class="menu-icon">☰</span>
+      <h1>CEIT Thesis Hub</h1>
+    </div>
+    <div class="header-right">
+      <h2>Admin Dashboard</h2>
+      <div class="header-logo"><img src="pictures/Logo.png" alt="CEIT Logo"  width="90" height="60"></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="index.html" class="active"><img src="pictures/DASHBOARD.png" alt="CEIT Logo"  width="30" height="30"> Dashboard</a>
+        <a href="manage-thesis.html"><img src="pictures/MANAGE.png" alt="CEIT Logo"  width="30" height="30"> Manage Thesis</a>
+        <a href="borrowing-request.html"><img src="pictures/REQUEST.png" alt="CEIT Logo"  width="30" height="30"> Request</a>
+      </nav>
+      <button class="logout">Sign Out</button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+      <section class="request-header">
+        <h2>Borrowing Requests</h2>
+        <div class="filter-container">
+          <label for="filterDropdown">Filter by:</label>
+          <div class="dropdown">
+            <button id="filterDropdownBtn" class="filter-btn">
+              Select <span class="arrow">▼</span>
+            </button>
+            <ul id="filterMenu" class="dropdown-menu hidden">
+              <li>Name</li>
+              <li>Date</li>
+              <li>Author</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Placeholder for the future table -->
+      <div class="table-placeholder">
+        Borrowing Requests table will appear here soon.
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

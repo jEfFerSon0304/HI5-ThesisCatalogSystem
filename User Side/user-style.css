@@ -1,0 +1,683 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --navy-dark: #00167a;
+  --navy-mid: #1a3d7c;
+  --sky-blue: #5c88b6;
+  --gray-light: #f5fbf9;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+/* ================================
+   BODY
+   ================================ */
+   
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  color: var(--black);
+}
+
+/* ================================
+   ADMIN LOGIN PAGE
+   ================================ */
+
+main {
+  flex: 1;
+  display: block;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  background-color: #f2f8f8;
+  width: 100%;
+  max-width: 400px;
+  padding: 50px 30px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+.login-box h2 {
+  font-family: "Poppins", sans-serif;
+  color: #0b3a75;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  position: relative;
+  margin: 10px auto;
+  width: 100%;
+}
+
+.input-group input {
+  font-family: "Poppins", sans-serif;
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  outline: none;
+}
+
+.icon {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  width: 24px;
+}
+
+.login-btn {
+  background-color: #0b3a75;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 15px;
+  width: 50%;
+}
+
+.login-btn:hover {
+  background-color: #092e5d;
+}
+
+.forgot-link {
+  font-family: "Poppins", sans-serif;
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #333;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* ================================
+   HOME PAGE
+   ================================ */
+
+/*------NAVBAR------*/
+nav {
+  background-color: #1A3D7C;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-section {
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-circle {
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-family: poppins, sans-serif;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  font-family: poppins, sans-serif;
+  color: white;
+  text-decoration: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-links a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/*------HERO SECTION------*/
+.hero-pic {
+  width: 100%;
+  height: 85vh;
+  /* Full screen height */
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.hero {
+  padding: 80px 40px;
+  text-align: center;
+  position: relative;
+}
+
+.college-logos {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.college-logo {
+  width: 140px;
+  height: 140px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero h1 {
+  font-family: poppins, sans-serif;
+  font-size: 42px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: white
+}
+
+.hero h2 {
+  font-family: poppins, sans-serif;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 400;
+  color: white
+}
+
+.hero p {
+  font-family: poppins, sans-serif;
+  font-size: 20px;
+  font-style: italic;
+  opacity: 0.95;
+  color: white
+}
+
+.content {
+  font-family: poppins, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 40px;
+}
+
+/*------CONTENTS------*/
+.welcome {
+  margin-bottom: 50px;
+}
+
+.welcome h2 {
+  font-family: poppins, sans-serif;
+  font-size: 36px;
+  color: #1e3c72;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.welcome p {
+  font-size: 18px;
+  color: #555;
+}
+
+.announcements {
+  margin-bottom: 50px;
+}
+
+.announcements h3 {
+  font-size: 28px;
+  color: #1e3c72;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.announcement-box {
+  background: linear-gradient(135deg, #a8d8ea 0%, #b8e6f5 100%);
+  border: 3px solid #2a5298;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.announcement-box ul {
+  list-style: none;
+}
+
+.announcement-box li {
+  font-size: 16px;
+  color: #1e3c72;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.announcement-box li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/*------QUICK ACTIONS------*/
+.quick-actions h3 {
+  font-size: 28px;
+  color: #1e3c72;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 18px 40px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary {
+  background: #1e3c72;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2a5298;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
+}
+
+.btn-secondary {
+  background: #a8d8ea;
+  color: #1e3c72;
+}
+
+.btn-secondary:hover {
+  background: #8fc7df;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(168, 216, 234, 0.4);
+}
+
+.btn-tertiary {
+  background: #d3d3d3;
+  color: #333;
+}
+
+.btn-tertiary:hover {
+  background: #bbb;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ================================
+   CATALOG PAGE
+   ================================ */
+
+.catalog-main {
+    text-align: center;
+    padding-top: 40px;
+}
+
+.catalog-title {
+    color: var(--navy-mid);
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.catalog-subtitle {
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.catalog-search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.catalog-search-input {
+    width: 400px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+.catalog-search-btn {
+    background-color: var(--sky-blue);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.catalog-filter {
+    margin-top: 15px;
+}
+
+.catalog-filter select {
+    font-family: "Poppins", sans-serif;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+/* TABLE */
+.catalog-table-section {
+  margin: 40px auto;
+  width: 85%;
+}
+
+.catalog-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.catalog-table th,
+.catalog-table td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: center;
+}
+
+.catalog-table thead {
+  background-color: var(--gray-light);
+  color: #1a3d7c;
+}
+
+.catalog-view-btn {
+  background-color: var(--navy-mid);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.catalog-view-btn:hover {
+  background-color: var(--navy-dark);
+}
+
+/* =========================================================
+   THESIS DETAILS PAGE
+   ========================================================= */
+.thesis-details-header {
+  background-color: var(--navy-mid);
+  color: white;
+  padding: 20px 40px;
+}
+
+.thesis-details-container {
+  background-color: white;
+  width: 70%;
+  margin: 40px auto;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.back-link {
+  color: #2b61cc;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.details-title {
+  font-size: 1.8rem;
+  color: #00215a;
+  margin-bottom: 25px;
+}
+
+.thesis-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  background-color: #f6f8fc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.meta-box {
+  flex: 1 1 200px;
+}
+
+.meta-box strong {
+  display: block;
+  color: #555;
+  font-size: 0.9rem;
+}
+.meta-box p {
+  font-weight: 600;
+  margin: 5px 0 0;
+}
+
+/* ABSTRACT */
+.thesis-abstract h3 {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.thesis-abstract p {
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/* BUTTONS */
+.button-group {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.borrow-btn {
+  background-color: #00215a;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.borrow-btn:hover {
+  background-color: #163d96;
+}
+
+.back-btn {
+  text-decoration: none;
+  background-color: #ccc;
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.back-btn:hover {
+  background-color: #aaa;
+}
+
+/* =========================================================
+   REQUEST FORM PAGE
+   ========================================================= */
+.request-container {
+  width: 85%;
+  max-width: 700px;
+  margin: 40px auto;
+  background: #f5fbf9;
+  border: 2px solid #5c88b6;
+  border-radius: 10px;
+  padding: 30px 40px;
+}
+
+.request-title {
+  text-align: center;
+  color: #00167a;
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.request-form-box label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.request-form-box input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1.5px solid #b5c5d1;
+  border-radius: 6px;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-row {
+  display: flex;
+  gap: 5%;
+}
+
+.form-buttons {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.btn-submit {
+  background-color: #1a3d7c;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-cancel {
+  background-color: #e0e6f6;
+  color: #000;
+  padding: 10px 25px;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-left: 10px;
+  font-weight: 600;
+}
+
+.success-msg {
+  color: #34a853;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+
+footer {
+  background: linear-gradient(135deg, #4a6fa5 0%, #5a7fb5 100%);
+  color: white;
+  padding-top: 40px;
+  text-align: center;
+}
+
+.footer-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #1e3c72;
+  font-size: 12px;
+}
+
+.footer-info-logo {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+footer h3 {
+  font-size: 32px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  font-family: poppins, sans-serif;
+}
+
+.footer-info {
+  margin: 20px 0;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.footer-info p {
+  margin: 8px 0;
+  font-family: 'cooper hewitt', sans-serif;
+}
+
+.copyright {
+  background: #1e3c72;
+  padding: 15px;
+  margin-top: 30px;
+  font-size: 14px;
+  font-family: 'cooper hewitt', sans-serif;
+}

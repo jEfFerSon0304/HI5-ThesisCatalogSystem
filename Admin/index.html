@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="icon" type="image/png" href="pictures/Logo.png">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="header-left">
+      <span class="menu-icon">☰</span>
+      <h1>CEIT Thesis Hub</h1>
+    </div>
+    <div class="header-right">
+      <h2>Admin Dashboard</h2>
+      <div class="header-logo"><img src="pictures/Logo.png" alt="CEIT Logo"  width="90" height="60"></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a href="index.html" class="active"><img src="pictures/DASHBOARD.png" alt="CEIT Logo"  width="30" height="30"> Dashboard</a>
+        <a href="manage-thesis.html"><img src="pictures/MANAGE.png" alt="CEIT Logo"  width="30" height="30"> Manage Thesis</a>
+        <a href="borrowing-request.html"><img src="pictures/REQUEST.png" alt="CEIT Logo"  width="30" height="30"> Request</a>
+      </nav>
+      <button class="logout">Sign Out</button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+  <section class="welcome-section">
+    <h2>Welcome! Admin</h2>
+    <p class="date">OCT 04, 2025 | SATURDAY, 12:00 PM</p>
+    <hr class="divider" />
+  </section>
+
+  <!-- Counters -->
+  <section class="dashboard-counters">
+    <div class="counter-card">
+      <div class="icon-box"><img src="pictures/TOTAL.png" alt="CEIT Logo"  width="50" height="50"></div>
+      <div class="counter-details">
+        <span class="counter-title">Total Thesis</span>
+        <span class="counter-value">187</span>
+      </div>
+    </div>
+    <div class="counter-card">
+      <div class="icon-box"><img src="pictures/APPROVED.png" alt="CEIT Logo"  width="50" height="50"></div>
+      <div class="counter-details">
+        <span class="counter-title">Approved</span>
+        <span class="counter-value">187</span>
+      </div>
+    </div>
+    <div class="counter-card">
+      <div class="icon-box"><img src="pictures/PENDING.png" alt="CEIT Logo"  width="50" height="50"></div>
+      <div class="counter-details">
+        <span class="counter-title">Pending Request</span>
+        <span class="counter-value">187</span>
+      </div>
+    </div>
+    <div class="counter-card">
+      <div class="icon-box"><img src="pictures/BORROWED.png" alt="CEIT Logo"  width="60" height="45" margin-top="10"></div>
+      <div class="counter-details">
+        <span class="counter-title">Borrowed</span>
+        <span class="counter-value">187</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Placeholder for Recent Requests -->
+  <h3 style="margin-top: 40px; color: #0A3D91;">Recent Requests</h3>
+  <div class="table-placeholder">
+    Recent Requests table will be displayed here soon.
+  </div>
+</main>
+
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
