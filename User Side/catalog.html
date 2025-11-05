@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <title>CEIT Thesis Hub | Home Page</title>
+    <link rel="icon" type="image/png" href="user-pictures/logo.png">
+    <link rel="stylesheet" href="user-style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="logo-section">
+            <img src="user-pictures/logo.png" class="logo-circle">
+            <div class="title">CEIT Thesis Hub</div>
+        </div>
+        <div class="nav-links">
+            <a href="home.html">HOME</a>
+            <a href="catalog.html" class="active">CATALOG</a>
+        </div>
+    </nav>
+    <!-- MAIN CONTENT -->
+    <main class="catalog-main">
+        <section class="catalog-intro">
+            <h2 class="catalog-title">CEIT Thesis Hub</h2>
+            <p class="catalog-subtitle">Discover and explore academic research</p>
+
+            <div class="catalog-search-box">
+                <input type="text" placeholder="Search thesis by title, author, or keyword..."
+                    class="catalog-search-input" />
+                <button class="catalog-search-btn">Search</button>
+            </div>
+
+            <div class="catalog-filter">
+                <label for="catalog-dept-filter">Filter:</label>
+                <select id="catalog-dept-filter">
+                    <option>Department</option>
+                    <option>Information Technology</option>
+                    <option>Civil Engineering</option>
+                    <option>Electrical Engineering</option>
+                </select>
+            </div>
+        </section>
+
+        <!--  TABLE SECTION -->
+        <section class="catalog-table-section">
+            <table class="catalog-table">
+                <thead>
+                    <tr>
+                        <th>TITLE</th>
+                        <th>DEPARTMENT</th>
+                        <th>YEAR</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{Title}</td>
+                        <td>{Department}</td>
+                        <td>{Year}</td>
+                        <td>{Status}</td>
+                        <td><a href="thesis-details.html" button class="catalog-view-btn">View Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>{Title}</td>
+                        <td>{Department}</td>
+                        <td>{Year}</td>
+                        <td>{Status}</td>
+                        <td><a href="thesis-details.html" button class="catalog-view-btn">View Details</button></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </section>
+
+        <footer>
+            <img src="user-pictures/logo.png" class="footer-logo">
+            <h3>PLV CEIT THESIS CATALOG</h3>
+            <div class="footer-info">
+                <p><img src="user-pictures/location.png" class="footer-info-logo"> 3rd Floor, CEIT Building, Main PLV Campus, Tongco St., Maysan, Valenzuela City</p>
+                <p><img src="user-pictures/email.png" class="footer-info-logo"> loremipsum@plv.edu.ph</p>
+                <p><img src="user-pictures/world-wide-web.png" class="footer-info-logo"> plv.edu.ph</p>
+            </div>
+            <div class="copyright">Copyright © 2025</div>
+        </footer>
+    </main>
+</body>
+
+</html>
