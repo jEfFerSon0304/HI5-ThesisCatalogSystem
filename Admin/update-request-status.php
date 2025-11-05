@@ -1,5 +1,6 @@
 <?php
 include "../PHP/db_connect.php";
+session_start(); // ✅ Required to access logged-in librarian/admin info
 
 if (isset($_POST['request_id']) && isset($_POST['new_status'])) {
     $id = intval($_POST['request_id']);
@@ -35,9 +36,20 @@ if (isset($_POST['request_id']) && isset($_POST['new_status'])) {
         }
     }
 
-    // Update request status
-    $update_stmt = $conn->prepare("UPDATE tbl_borrow_requests SET status = ? WHERE request_id = ?");
-    $update_stmt->bind_param("si", $status, $id);
+    // ✅ Get current librarian/admin name
+    $librarian_name = 'Super Admin'; // default fallback
+    if (isset($_SESSION['fullname'])) {
+        $librarian_name = $_SESSION['fullname'];
+    }
+
+    // ✅ When approved, store librarian name
+    if ($status === 'Approved') {
+        $update_stmt = $conn->prepare("UPDATE tbl_borrow_requests SET status = ?, librarian_name = ? WHERE request_id = ?");
+        $update_stmt->bind_param("ssi", $status, $librarian_name, $id);
+    } else {
+        $update_stmt = $conn->prepare("UPDATE tbl_borrow_requests SET status = ? WHERE request_id = ?");
+        $update_stmt->bind_param("si", $status, $id);
+    }
 
     if ($update_stmt->execute()) {
         echo "Status updated to $status.";

@@ -62,10 +62,10 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "SELECT r.*, t.title, t.author, t.department, t.year 
-                                FROM tbl_borrow_requests r 
-                                JOIN tbl_thesis t ON r.thesis_id = t.thesis_id 
-                                ORDER BY r.request_date DESC";
+                        $sql = "SELECT r.*, t.title, t.author, t.department, t.year, r.librarian_name 
+                            FROM tbl_borrow_requests r 
+                            JOIN tbl_thesis t ON r.thesis_id = t.thesis_id 
+                            ORDER BY r.request_date DESC";
 
                         $result = $conn->query($sql);
 
@@ -121,12 +121,14 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
 
             const details = document.getElementById('modal-details');
             const actions = document.getElementById('modal-actions');
+            const librarianName = data.librarian_name && data.librarian_name !== "null" ? data.librarian_name : "";
 
             let statusClass = '';
             if (data.status === 'Complete - Returned') statusClass = 'status-returned';
             else if (data.status === 'Complete - Rejected') statusClass = 'status-rejected';
 
-            details.innerHTML = `
+            // 🧱 Build the modal content step-by-step
+            let content = `
                 <div class="detail-item"><strong>Request #:</strong> ${data.request_number}</div>
                 <div class="detail-item"><strong>Student Name:</strong> ${data.student_name}</div>
                 <div class="detail-item"><strong>Student No.:</strong> ${data.student_no}</div>
@@ -139,6 +141,16 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 <div class="detail-item"><strong>Date Requested:</strong> ${data.request_date}</div>
                 <div class="detail-item ${statusClass}"><strong>Current Status:</strong> ${data.status}</div>
             `;
+
+            // ✅ Add librarian name only if available
+            if (librarianName !== "") {
+                content += `
+            <div class="detail-item"><strong>Librarian:</strong> ${librarianName}</div>
+        `;
+            }
+
+            // Apply to modal
+            details.innerHTML = content;
 
             let btns = '';
             if (data.status === 'Pending') {
