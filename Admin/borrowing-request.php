@@ -47,8 +47,34 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 <h2>Borrowing Requests</h2>
             </section>
 
+            <section class="request-controls">
+                <div class="controls-left">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search student or thesis title..." />
+                    </div>
+                    <div class="filter-box">
+                        <select id="statusFilter">
+                            <option value="all">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Returned">Returned</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Complete">Complete</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="controls-right">
+                    <div class="pagination">
+                        <button id="prevPage">&lt;</button>
+                        <span>Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+                        <button id="nextPage">&gt;</button>
+                    </div>
+                </div>
+            </section>
+
             <section class="request-table">
-                <table>
+                <table id="requestTable">
                     <thead>
                         <tr>
                             <th>Request #</th>
@@ -60,18 +86,16 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tableBody">
                         <?php
                         $sql = "SELECT r.*, t.title, t.author, t.department, t.year, r.librarian_name 
-                            FROM tbl_borrow_requests r 
-                            JOIN tbl_thesis t ON r.thesis_id = t.thesis_id 
-                            ORDER BY r.request_date DESC";
-
+                    FROM tbl_borrow_requests r 
+                    JOIN tbl_thesis t ON r.thesis_id = t.thesis_id 
+                    ORDER BY r.request_date DESC";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                // Simplify for table display
                                 $status_display = $row['status'];
                                 if (stripos($status_display, 'complete') !== false) {
                                     $status_display = 'Complete';
@@ -80,15 +104,15 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                                 $json_data = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
 
                                 echo "
-                                <tr>
-                                    <td>{$row['request_number']}</td>
-                                    <td>{$row['student_name']}</td>
-                                    <td>{$row['title']}</td>
-                                    <td>{$row['department']}</td>
-                                    <td>{$row['request_date']}</td>
-                                    <td>{$status_display}</td>
-                                    <td><button class='view-btn' data-row='{$json_data}' onclick='openModal(this)'>View</button></td>
-                                </tr>";
+                    <tr>
+                        <td>{$row['request_number']}</td>
+                        <td>{$row['student_name']}</td>
+                        <td>{$row['title']}</td>
+                        <td>{$row['department']}</td>
+                        <td>{$row['request_date']}</td>
+                        <td>{$status_display}</td>
+                        <td><button class='view-btn' data-row='{$json_data}' onclick='openModal(this)'>View</button></td>
+                    </tr>";
                             }
                         } else {
                             echo "<tr><td colspan='7'>No borrowing requests yet.</td></tr>";
@@ -99,6 +123,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                     </tbody>
                 </table>
             </section>
+
         </main>
     </div>
 
@@ -114,7 +139,92 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
 
     <script>
         let currentRequest = null;
+        const rowsPerPage = 10;
+        let currentPage = 1;
+        let allRows = [];
 
+        document.addEventListener("DOMContentLoaded", () => {
+            const tableBody = document.getElementById("tableBody");
+            allRows = Array.from(tableBody.querySelectorAll("tr"));
+
+            const searchInput = document.getElementById("searchInput");
+            const statusFilter = document.getElementById("statusFilter");
+            const prevPage = document.getElementById("prevPage");
+            const nextPage = document.getElementById("nextPage");
+
+            function filterAndRender() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedStatus = statusFilter.value;
+
+                const filtered = allRows.filter(row => {
+                    const cols = row.querySelectorAll("td");
+                    const name = cols[1]?.textContent.toLowerCase() || "";
+                    const title = cols[2]?.textContent.toLowerCase() || "";
+                    const status = cols[5]?.textContent.trim() || "";
+
+                    const matchesSearch = name.includes(searchTerm) || title.includes(searchTerm);
+                    const matchesStatus = selectedStatus === "all" || status === selectedStatus;
+                    return matchesSearch && matchesStatus;
+                });
+
+                renderTable(filtered);
+            }
+
+            function renderTable(filteredRows) {
+                const totalPages = Math.ceil(filteredRows.length / rowsPerPage) || 1;
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                const pageRows = filteredRows.slice(start, end);
+
+                tableBody.innerHTML = "";
+                pageRows.forEach(row => tableBody.appendChild(row));
+
+                document.getElementById("currentPage").textContent = currentPage;
+                document.getElementById("totalPages").textContent = totalPages;
+
+                prevPage.disabled = currentPage === 1;
+                nextPage.disabled = currentPage === totalPages;
+            }
+
+            searchInput.addEventListener("input", () => {
+                currentPage = 1;
+                filterAndRender();
+            });
+
+            statusFilter.addEventListener("change", () => {
+                currentPage = 1;
+                filterAndRender();
+            });
+
+            prevPage.addEventListener("click", () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    filterAndRender();
+                }
+            });
+
+            nextPage.addEventListener("click", () => {
+                const filtered = allRows.filter(row => {
+                    const cols = row.querySelectorAll("td");
+                    const name = cols[1]?.textContent.toLowerCase() || "";
+                    const title = cols[2]?.textContent.toLowerCase() || "";
+                    const status = cols[5]?.textContent.trim() || "";
+                    const matchesSearch = name.includes(searchInput.value.toLowerCase()) || title.includes(searchInput.value.toLowerCase());
+                    const matchesStatus = statusFilter.value === "all" || status === statusFilter.value;
+                    return matchesSearch && matchesStatus;
+                });
+
+                const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    filterAndRender();
+                }
+            });
+
+            filterAndRender(); // initial render
+        });
+
+        /* Existing modal + status update logic */
         function openModal(button) {
             const data = JSON.parse(button.getAttribute('data-row'));
             currentRequest = data;
@@ -123,49 +233,35 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
             const actions = document.getElementById('modal-actions');
             const librarianName = data.librarian_name && data.librarian_name !== "null" ? data.librarian_name : "";
 
-            let statusClass = '';
-            if (data.status === 'Complete - Returned') statusClass = 'status-returned';
-            else if (data.status === 'Complete - Rejected') statusClass = 'status-rejected';
-
-            // 🧱 Build the modal content step-by-step
             let content = `
-                <div class="detail-item"><strong>Request #:</strong> ${data.request_number}</div>
-                <div class="detail-item"><strong>Student Name:</strong> ${data.student_name}</div>
-                <div class="detail-item"><strong>Student No.:</strong> ${data.student_no}</div>
-                <div class="detail-item"><strong>Course & Section:</strong> ${data.course_section}</div>
-                <hr>
-                <div class="detail-item"><strong>Thesis Title:</strong> ${data.title}</div>
-                <div class="detail-item"><strong>Author(s):</strong> ${data.author}</div>
-                <div class="detail-item"><strong>Department:</strong> ${data.department}</div>
-                <div class="detail-item"><strong>Year:</strong> ${data.year}</div>
-                <div class="detail-item"><strong>Date Requested:</strong> ${data.request_date}</div>
-                <div class="detail-item ${statusClass}"><strong>Current Status:</strong> ${data.status}</div>
-            `;
-
-            // ✅ Add librarian name only if available
+        <div class="detail-item"><strong>Request #:</strong> ${data.request_number}</div>
+        <div class="detail-item"><strong>Student Name:</strong> ${data.student_name}</div>
+        <div class="detail-item"><strong>Student No.:</strong> ${data.student_no}</div>
+        <div class="detail-item"><strong>Course & Section:</strong> ${data.course_section}</div>
+        <hr>
+        <div class="detail-item"><strong>Thesis Title:</strong> ${data.title}</div>
+        <div class="detail-item"><strong>Author(s):</strong> ${data.author}</div>
+        <div class="detail-item"><strong>Department:</strong> ${data.department}</div>
+        <div class="detail-item"><strong>Year:</strong> ${data.year}</div>
+        <div class="detail-item"><strong>Date Requested:</strong> ${data.request_date}</div>
+        <div class="detail-item"><strong>Status:</strong> ${data.status}</div>
+    `;
             if (librarianName !== "") {
-                content += `
-            <div class="detail-item"><strong>Librarian:</strong> ${librarianName}</div>
-        `;
+                content += `<div class="detail-item"><strong>Librarian:</strong> ${librarianName}</div>`;
             }
-
-            // Apply to modal
             details.innerHTML = content;
 
             let btns = '';
             if (data.status === 'Pending') {
-                btns += `<button class="status-btn approve" onclick="updateStatus(${data.request_id}, 'Approved')">Approve</button>
-                         <button class="status-btn reject" onclick="updateStatus(${data.request_id}, 'Rejected')">Reject</button>`;
+                btns = `<button class='status-btn approve' onclick="updateStatus(${data.request_id}, 'Approved')">Approve</button>
+                <button class='status-btn reject' onclick="updateStatus(${data.request_id}, 'Rejected')">Reject</button>`;
             } else if (data.status === 'Approved') {
-                btns += `<button class="status-btn return" onclick="updateStatus(${data.request_id}, 'Returned')">Mark as Returned</button>`;
-            } else if (data.status === 'Returned') {
-                btns += `<button class="status-btn complete" onclick="updateStatus(${data.request_id}, 'Complete')">Mark as Complete</button>`;
-            } else if (data.status === 'Rejected') {
-                btns += `<button class="status-btn complete" onclick="updateStatus(${data.request_id}, 'Complete')">Mark as Complete</button>`;
+                btns = `<button class='status-btn return' onclick="updateStatus(${data.request_id}, 'Returned')">Mark as Returned</button>`;
+            } else if (['Returned', 'Rejected'].includes(data.status)) {
+                btns = `<button class='status-btn complete' onclick="updateStatus(${data.request_id}, 'Complete')">Mark as Complete</button>`;
             } else {
                 btns = `<p style="color:gray;">No further actions available.</p>`;
             }
-
             actions.innerHTML = btns;
             document.getElementById('viewModal').style.display = 'flex';
         }
