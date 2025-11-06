@@ -109,7 +109,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                         <td>{$row['student_name']}</td>
                         <td>{$row['title']}</td>
                         <td>{$row['department']}</td>
-                        <td>{$row['request_date']}</td>
+                        <td>" . date('Y-m-d', strtotime($row['request_date'])) . "</td>
                         <td>{$status_display}</td>
                         <td><button class='view-btn' data-row='{$json_data}' onclick='openModal(this)'>View</button></td>
                     </tr>";

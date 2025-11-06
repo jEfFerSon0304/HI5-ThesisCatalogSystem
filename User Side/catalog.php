@@ -52,22 +52,33 @@
         </section>
 
         <!-- TABLE SECTION -->
+        <!-- TABLE SECTION -->
         <section class="catalog-table-section">
-            <table class="catalog-table">
-                <thead>
-                    <tr>
-                        <th>TITLE</th>
-                        <th>DEPARTMENT</th>
-                        <th>YEAR</th>
-                        <th>STATUS</th>
-                        <th>ACTION</th>
-                    </tr>
-                </thead>
-                <tbody id="catalogResults">
-                    <!-- Results will load here -->
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table class="catalog-table" id="catalogTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;">TITLE</th>
+                            <th style="width: 25%;">DEPARTMENT</th>
+                            <th style="width: 10%;">YEAR</th>
+                            <th style="width: 10%;">STATUS</th>
+                            <th style="width: 15%;">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="catalogResults">
+                        <!-- Results will load here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PAGINATION (bottom only) -->
+            <div class="pagination-container">
+                <button id="prevPage" disabled>&lt;</button>
+                <span>Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+                <button id="nextPage">&gt;</button>
+            </div>
         </section>
+
 
         <footer>
             <img src="user-pictures/logo.png" class="footer-logo">
@@ -108,6 +119,78 @@
         document.addEventListener('DOMContentLoaded', loadResults);
         // Live search (instant typing)
         document.getElementById('searchInput').addEventListener('keyup', () => loadResults());
+
+        const rowsPerPage = 30;
+        let currentPage = 1;
+        let totalPages = 1;
+        let allRows = [];
+
+        // Load thesis dynamically
+        function loadResults() {
+            const search = document.getElementById('searchInput').value.trim();
+            const department = document.getElementById('catalog-dept-filter').value;
+
+            fetch(`fetch_thesis.php?search=${encodeURIComponent(search)}&department=${encodeURIComponent(department)}`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('catalogResults').innerHTML = html;
+                    highlightSearch(search);
+
+                    // After loading, rebuild pagination
+                    const tableRows = Array.from(document.querySelectorAll('#catalogResults tr'));
+                    allRows = tableRows;
+                    currentPage = 1;
+                    renderPage();
+                });
+        }
+
+        // Highlight matches
+        function highlightSearch(keyword) {
+            if (!keyword) return;
+            const regex = new RegExp(`(${keyword})`, 'gi');
+            document.querySelectorAll('#catalogResults td:first-child').forEach(cell => {
+                cell.innerHTML = cell.textContent.replace(regex, `<span class='highlight'>$1</span>`);
+            });
+        }
+
+        // Pagination render
+        function renderPage() {
+            const tableBody = document.getElementById('catalogResults');
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const pageRows = allRows.slice(start, end);
+
+            tableBody.innerHTML = "";
+            pageRows.forEach(row => tableBody.appendChild(row));
+
+            totalPages = Math.ceil(allRows.length / rowsPerPage) || 1;
+            document.getElementById("currentPage").textContent = currentPage;
+            document.getElementById("totalPages").textContent = totalPages;
+
+            document.getElementById("prevPage").disabled = currentPage === 1;
+            document.getElementById("nextPage").disabled = currentPage === totalPages;
+        }
+
+        // Page navigation
+        document.getElementById("prevPage").addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage();
+            }
+        });
+
+        document.getElementById("nextPage").addEventListener("click", () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage();
+            }
+        });
+
+        // Auto-load results on page load
+        document.addEventListener('DOMContentLoaded', loadResults);
+
+        // Live search
+        document.getElementById('searchInput').addEventListener('keyup', loadResults);
     </script>
 </body>
 
