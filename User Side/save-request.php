@@ -42,15 +42,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p class="request-number">Request Number: <?php echo $formatted_number; ?></p>
 
                 <div class="preview-info">
-                    <p><strong>Student Name:</strong> <?php echo htmlspecialchars($student_name); ?></p>
-                    <p><strong>Student No.:</strong> <?php echo htmlspecialchars($student_no); ?></p>
-                    <p><strong>Course & Section:</strong> <?php echo htmlspecialchars($course_section); ?></p>
+                    <h4>Student Information</h4>
+                    <div class="label">Student Name</div>
+                    <div class="value"><?php echo htmlspecialchars($student_name); ?></div>
+
+                    <div class="label">Student No.</div>
+                    <div class="value"><?php echo htmlspecialchars($student_no); ?></div>
+
+                    <div class="label">Course & Section</div>
+                    <div class="value"><?php echo htmlspecialchars($course_section); ?></div>
+
                     <hr>
-                    <p><strong>Thesis Title:</strong> <?php echo htmlspecialchars($thesis['title']); ?></p>
-                    <p><strong>Author(s):</strong> <?php echo htmlspecialchars($thesis['author']); ?></p>
-                    <p><strong>Department:</strong> <?php echo htmlspecialchars($thesis['department']); ?></p>
-                    <p><strong>Year:</strong> <?php echo htmlspecialchars($thesis['year']); ?></p>
+
+                    <h4>Thesis Information</h4>
+                    <div class="label">Thesis Title</div>
+                    <div class="value"><?php echo htmlspecialchars($thesis['title']); ?></div>
+
+                    <div class="label">Author(s)</div>
+                    <div class="value"><?php echo htmlspecialchars($thesis['author']); ?></div>
+
+                    <div class="label">Department</div>
+                    <div class="value"><?php echo htmlspecialchars($thesis['department']); ?></div>
+
+                    <div class="label">Year</div>
+                    <div class="value"><?php echo htmlspecialchars($thesis['year']); ?></div>
                 </div>
+
 
                 <form action="catalog.php" method="get">
                     <button type="submit" class="ok-btn">OK</button>
