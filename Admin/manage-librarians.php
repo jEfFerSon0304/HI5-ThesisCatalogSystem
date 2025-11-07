@@ -23,126 +23,8 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
     <link rel="icon" type="image/png" href="pictures/Logo.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-
     <style>
-        body {
-            font-family: "Poppins", sans-serif;
-            background: #f6f8fa;
-            margin: 0;
-            padding: 0;
-        }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        table th,
-        table td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-        }
-
-        table th {
-            background: #2f3640;
-            color: #fff;
-            text-transform: uppercase;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .action-btn {
-            padding: 6px 10px;
-            margin: 2px;
-            border: none;
-            border-radius: 6px;
-            color: #fff;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 13px;
-        }
-
-        .approve {
-            background-color: #4caf50;
-        }
-
-        .reject {
-            background-color: #f44336;
-        }
-
-        .deactivate {
-            background-color: #9e9e9e;
-        }
-
-        .view {
-            background-color: #3498db;
-        }
-
-        .approve:hover {
-            background-color: #43a047;
-        }
-
-        .reject:hover {
-            background-color: #e53935;
-        }
-
-        .deactivate:hover {
-            background-color: #757575;
-        }
-
-        .view:hover {
-            background-color: #2e86c1;
-        }
-
-        .divider {
-            border: 0;
-            height: 2px;
-            background: #ddd;
-            margin: 15px 0;
-        }
-
-        .filter-bar {
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .filter-bar input,
-        .filter-bar select {
-            padding: 7px 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 10px;
-            color: #fff;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-
-        .status-approved {
-            background-color: #4caf50;
-        }
-
-        .status-pending {
-            background-color: #ff9800;
-        }
-
-        .status-inactive {
-            background-color: #9e9e9e;
-        }
-
-        .status-rejected {
-            background-color: #f44336;
-        }
     </style>
 </head>
 
@@ -168,24 +50,6 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 <hr class="divider" />
             </section>
 
-            <!-- 🔍 Filter + Sort Section -->
-            <div class="filter-bar">
-                <input type="text" id="searchInput" placeholder="Search name or email...">
-                <select id="statusFilter">
-                    <option value="">All Status</option>
-                    <option value="approved">Approved</option>
-                    <option value="pending">Pending</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="rejected">Rejected</option>
-                </select>
-                <select id="sortBy">
-                    <option value="id">Sort by ID</option>
-                    <option value="name">Sort by Name</option>
-                    <option value="status">Sort by Status</option>
-                </select>
-            </div>
-
-            <!-- 📋 Librarians Table -->
             <section>
                 <table>
                     <thead>
@@ -204,37 +68,36 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                         $result = $conn->query("SELECT * FROM tbl_librarians ORDER BY librarian_id DESC");
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                $statusClass = "status-" . strtolower($row['status']);
+                                $statusColor = match ($row['status']) {
+                                    'approved' => 'green',
+                                    'pending' => 'orange',
+                                    'inactive' => 'gray',
+                                    default => 'black'
+                                };
 
                                 echo "<tr>
-                                    <td>{$row['librarian_id']}</td>
-                                    <td>{$row['fullname']}</td>
-                                    <td>{$row['email']}</td>
-                                    <td>{$row['section']}</td>
-                                    <td><span class='status-badge $statusClass'>{$row['status']}</span></td>
-                                    <td>" . ($row['last_login'] ?? 'N/A') . "</td>
-                                    <td>";
+                  <td>{$row['librarian_id']}</td>
+                  <td>{$row['fullname']}</td>
+                  <td>{$row['email']}</td>
+                  <td>{$row['section']}</td>
+                  <td style='color:$statusColor;font-weight:600;'>{$row['status']}</td>
+                  <td>" . ($row['last_login'] ?? 'N/A') . "</td>
+                  <td>";
 
-                                // ✅ Buttons
                                 if ($row['status'] === 'pending') {
                                     echo "
-                                        <button class='action-btn approve' onclick=\"updateStatus({$row['librarian_id']}, 'approved')\">Approve</button>
-                                        <button class='action-btn reject' onclick=\"updateStatus({$row['librarian_id']}, 'rejected')\">Reject</button>
-                                    ";
+                    <button class='action-btn approve' onclick=\"updateStatus({$row['librarian_id']}, 'approved')\">Approve</button>
+                    <button class='action-btn reject' onclick=\"updateStatus({$row['librarian_id']}, 'rejected')\">Reject</button>
+                  ";
                                 } elseif ($row['status'] === 'approved') {
                                     echo "
-                                        <button class='action-btn deactivate' onclick=\"updateStatus({$row['librarian_id']}, 'inactive')\">Deactivate</button>
-                                    ";
+                    <button class='action-btn deactivate' onclick=\"updateStatus({$row['librarian_id']}, 'inactive')\">Deactivate</button>
+                  ";
                                 } elseif ($row['status'] === 'inactive') {
                                     echo "
-                                        <button class='action-btn approve' onclick=\"updateStatus({$row['librarian_id']}, 'approved')\">Reactivate</button>
-                                    ";
+                    <button class='action-btn approve' onclick=\"updateStatus({$row['librarian_id']}, 'approved')\">Reactivate</button>
+                  ";
                                 }
-
-                                // 👁️ View Profile Button
-                                echo "
-                                    <button class='action-btn view' onclick=\"window.location.href='view-librarian.php?id={$row['librarian_id']}'\">View</button>
-                                ";
 
                                 echo "</td></tr>";
                             }
@@ -249,8 +112,25 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
         </main>
     </div>
 
-    <!-- 🧠 Scripts -->
-    <script src="script.js"></script>
+    <script src="script.js">
+        function updateStatus(id, newStatus) {
+            if (!confirm(`Are you sure you want to set this account to '${newStatus}'?`)) return;
+
+            fetch('update-librarian-status.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `id=${id}&status=${newStatus}`
+                })
+                .then(res => res.text())
+                .then(msg => {
+                    alert(msg);
+                    location.reload();
+                })
+                .catch(err => alert('Error updating status.'));
+        }
+    </script>
 </body>
 
 </html>

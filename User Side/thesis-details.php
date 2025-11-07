@@ -62,15 +62,13 @@ $conn->close();
             <div class="meta-box">
                 <strong>Availability</strong>
                 <p id="thesis-availability">
-                    <?php if ($thesis['availability'] === "Available"): ?>
-                        <span class="availability-badge available">
-                            <i class="fas fa-check-circle"></i> Available
-                        </span>
-                    <?php else: ?>
-                        <span class="availability-badge unavailable">
-                            <i class="fas fa-times-circle"></i> Unavailable
-                        </span>
-                    <?php endif; ?>
+                    <?php
+                    if ($thesis['availability'] === "Available") {
+                        echo "✓ Available";
+                    } else {
+                        echo "✗ Unavailable";
+                    }
+                    ?>
                 </p>
             </div>
         </section>

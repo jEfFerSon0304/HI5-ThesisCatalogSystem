@@ -53,10 +53,10 @@ $conn->close();
 
             <div class="thesis-info-box">
                 <h3>Thesis Information</h3>
-                <p><strong>Title</strong><span><?php echo htmlspecialchars($thesis['title']); ?></span></p><br>
-                <p><strong>Author(s)</strong><span><?php echo htmlspecialchars($thesis['author']); ?></span></p><br>
-                <p><strong>Department</strong><span><?php echo htmlspecialchars($thesis['department']); ?></span></p><br>
-                <p><strong>Year</strong><span><?php echo htmlspecialchars($thesis['year']); ?></span></p>
+                <p><strong>Title:</strong> <?php echo htmlspecialchars($thesis['title']); ?></p>
+                <p><strong>Author(s):</strong> <?php echo htmlspecialchars($thesis['author']); ?></p>
+                <p><strong>Department:</strong> <?php echo htmlspecialchars($thesis['department']); ?></p>
+                <p><strong>Year:</strong> <?php echo htmlspecialchars($thesis['year']); ?></p>
             </div>
 
             <hr>
