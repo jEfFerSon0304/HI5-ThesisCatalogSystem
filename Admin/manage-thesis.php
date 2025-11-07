@@ -52,38 +52,44 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 <button id="addThesisBtn" class="add-btn-header">📄 Add New Thesis</button>
 
                 <!-- ✅ SEARCH + FILTER + BULK TOGGLE -->
-                <div class="table-controls">
-                    <input type="text" id="searchInput" placeholder="Search by title or author...">
-                    <select id="filterDepartment">
-                        <option value="">All Departments</option>
-                        <option value="Information Technology">Information Technology</option>
-                        <option value="Civil Engineering">Civil Engineering</option>
-                        <option value="Electrical Engineering">Electrical Engineering</option>
-                    </select>
-                    <select id="filterAvailability">
-                        <option value="">All Availability</option>
-                        <option value="Available">Available</option>
-                        <option value="Unavailable">Unavailable</option>
-                    </select>
-                </div>
-                <div class="bulk-container">
-                    <button id="bulkToggleBtn" class="bulk-toggle">🗂 Select</button>
-                    <div id="bulkActions" class="bulk-actions hidden">
-                        <button id="bulkDeleteBtn" class="bulk-btn delete">Delete</button>
-                        <button id="bulkAvailableBtn" class="bulk-btn avail">Mark Available</button>
-                        <button id="bulkUnavailableBtn" class="bulk-btn unavail">Mark Unavailable</button>
-                        <button id="exitBulkBtn" class="bulk-btn exit">❌ Exit</button>
+                <!-- ✅ TABLE CONTROLS BAR -->
+                <div class="table-controls-wrapper">
+                    <div class="controls-left">
+                        <!-- Search Bar -->
+                        <input type="text" id="searchInput" placeholder="Search by title or author...">
+
+                        <!-- Filter (with checkboxes inside dropdown) -->
+                        <div class="filter-dropdown">
+                            <button type="button" id="filterToggleBtn">Filter ⏷</button>
+                            <div id="filterMenu" class="filter-menu hidden">
+                                <label><input type="checkbox" class="filter-dept" value="Information Technology"> Information Technology</label>
+                                <label><input type="checkbox" class="filter-dept" value="Civil Engineering"> Civil Engineering</label>
+                                <label><input type="checkbox" class="filter-dept" value="Electrical Engineering"> Electrical Engineering</label>
+                                <hr>
+                                <label><input type="checkbox" class="filter-availability" value="Available"> Available</label>
+                                <label><input type="checkbox" class="filter-availability" value="Unavailable"> Unavailable</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="controls-right">
+                        <!-- Pagination -->
+                        <div class="pagination">
+                            <button id="prevPage">&lt;</button>
+                            <span>Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+                            <button id="nextPage">&gt;</button>
+                        </div>
                     </div>
                 </div>
 
                 <table>
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Author(s)</th>
-                            <th>Year</th>
-                            <th>Department</th>
-                            <th>Availability</th>
+                            <th style="width: 40%;">Title</th>
+                            <th style="width: 25%;">Author(s)</th>
+                            <th style="width: 10%;">Year</th>
+                            <th style="width: 10%;">Department</th>
+                            <th style="width: 15%;">Availability</th>
                             <!-- <th>Last Updated</th> -->
                             <th>Action</th>
                         </tr>
@@ -95,18 +101,24 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                echo "
-                                <tr data-id='{$row['thesis_id']}'>
-                                    <td>{$row['title']}</td>
-                                    <td>{$row['author']}</td>
-                                    <td>{$row['year']}</td>
-                                    <td>{$row['department']}</td>
-                                    <td>{$row['availability']}</td>
-                                    
+                                // ✅ Safely encode PHP array into valid JS object string
+                                $jsonData = json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_TAG);
+                        ?>
+                                <tr data-id="<?= htmlspecialchars($row['thesis_id']) ?>">
+                                    <td><?= htmlspecialchars($row['title']) ?></td>
+                                    <td><?= htmlspecialchars($row['author']) ?></td>
+                                    <td><?= htmlspecialchars($row['year']) ?></td>
+                                    <td><?= htmlspecialchars($row['department']) ?></td>
+                                    <td><?= htmlspecialchars($row['availability']) ?></td>
                                     <td>
-                                        <button class='action-btn edit-btn' onclick='openEditModal(" . json_encode($row) . ")'>Edit</button>
+                                        <button
+                                            class="action-btn edit-btn"
+                                            onclick='openEditModal(<?= $jsonData ?>)'>
+                                            Edit
+                                        </button>
                                     </td>
-                                </tr>";
+                                </tr>
+                        <?php
                             }
                         } else {
                             echo "<tr><td colspan='7'>No thesis records found.</td></tr>";
@@ -114,6 +126,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                         $conn->close();
                         ?>
                     </tbody>
+
                 </table>
             </section>
 

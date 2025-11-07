@@ -493,3 +493,114 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// Manange thesis
+const rowsPerPage = 30;
+let currentPage = 1;
+let allRows = [];
+
+document.addEventListener("DOMContentLoaded", () => {
+    const filterToggleBtn = document.getElementById("filterToggleBtn");
+    const filterMenu = document.getElementById("filterMenu");
+
+    // Toggle dropdown visibility
+    filterToggleBtn.addEventListener("click", () => {
+        filterMenu.classList.toggle("hidden");
+    });
+
+    // Hide dropdown when clicking outside
+    document.addEventListener("click", (e) => {
+        if (
+            !filterMenu.contains(e.target) &&
+            !filterToggleBtn.contains(e.target)
+        ) {
+            filterMenu.classList.add("hidden");
+        }
+    });
+
+    // Initialize table data
+    const tableBody = document.querySelector("table tbody");
+    allRows = Array.from(tableBody.querySelectorAll("tr"));
+
+    // Filter + Search Logic
+    function filterAndSearch() {
+        const searchTerm = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+        const selectedDepts = Array.from(
+            document.querySelectorAll(".filter-dept:checked")
+        ).map((c) => c.value);
+        const selectedAvail = Array.from(
+            document.querySelectorAll(".filter-availability:checked")
+        ).map((c) => c.value);
+
+        const filtered = allRows.filter((row) => {
+            const cols = row.querySelectorAll("td");
+            const title = cols[0]?.textContent.toLowerCase() || "";
+            const author = cols[1]?.textContent.toLowerCase() || "";
+            const dept = cols[3]?.textContent.trim() || "";
+            const avail = cols[4]?.textContent.trim() || "";
+
+            const matchesSearch =
+                title.includes(searchTerm) || author.includes(searchTerm);
+            const matchesDept =
+                selectedDepts.length === 0 || selectedDepts.includes(dept);
+            const matchesAvail =
+                selectedAvail.length === 0 || selectedAvail.includes(avail);
+            return matchesSearch && matchesDept && matchesAvail;
+        });
+
+        renderTable(filtered);
+    }
+
+    // Pagination renderer
+    function renderTable(filteredRows) {
+        const totalPages = Math.ceil(filteredRows.length / rowsPerPage) || 1;
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const pageRows = filteredRows.slice(start, end);
+
+        tableBody.innerHTML = "";
+        pageRows.forEach((row) => tableBody.appendChild(row));
+
+        document.getElementById("currentPage").textContent = currentPage;
+        document.getElementById("totalPages").textContent = totalPages;
+        document.getElementById("prevPage").disabled = currentPage === 1;
+        document.getElementById("nextPage").disabled =
+            currentPage === totalPages;
+    }
+
+    // Event listeners
+    document.getElementById("searchInput").addEventListener("input", () => {
+        currentPage = 1;
+        filterAndSearch();
+    });
+
+    document
+        .querySelectorAll(".filter-dept, .filter-availability")
+        .forEach((cb) => {
+            cb.addEventListener("change", () => {
+                currentPage = 1;
+                filterAndSearch();
+            });
+        });
+
+    document.getElementById("prevPage").addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            filterAndSearch();
+        }
+    });
+
+    document.getElementById("nextPage").addEventListener("click", () => {
+        const filtered = allRows.filter((row) => row.style.display !== "none");
+        const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+        if (currentPage < totalPages) {
+            currentPage++;
+            filterAndSearch();
+        }
+    });
+
+    // Initial render
+    filterAndSearch();
+});

@@ -120,7 +120,7 @@
         // Live search (instant typing)
         document.getElementById('searchInput').addEventListener('keyup', () => loadResults());
 
-        const rowsPerPage = 30;
+        const rowsPerPage = 20;
         let currentPage = 1;
         let totalPages = 1;
         let allRows = [];

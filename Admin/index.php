@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Password -->
                     <div class="input-group">
-                        <input type="password" name="password" placeholder="Password" required />
+                        <input type="password" name="password" autocomplete="off" oncopy="return false" onpaste="return false">
                         <img src="pictures/lock.png" class="icon" />
                     </div>
 

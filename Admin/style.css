@@ -319,6 +319,7 @@ table {
 
 th,
 td {
+    font-size: 14px;
     padding: 14px;
     text-align: center;
     border: 1px solid #ccc;
@@ -506,6 +507,114 @@ th {
     margin-top: 25px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
     transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* --- Table Controls Wrapper --- */
+.table-controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.controls-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Search Bar */
+#searchInput {
+    padding: 8px 10px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+/* Filter Dropdown */
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.filter-dropdown button {
+    padding: 8px 12px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.filter-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 50;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+}
+
+.filter-menu.hidden {
+    display: none;
+}
+
+.filter-menu label {
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.filter-menu hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 5px 0;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagination button {
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 9px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.pagination button:hover {
+    background-color: #3347c1;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 /* ===============================
@@ -1205,4 +1314,42 @@ textarea {
 .pagination button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+/* Settings */
+
+.settings-page {
+    padding: 20px;
+}
+
+.settings-category {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+    padding: 20px;
+}
+
+.settings-category h3 {
+    color: #0a3d91;
+    margin-bottom: 10px;
+}
+
+.settings-category ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.settings-category ul li {
+    margin: 8px 0;
+}
+
+.settings-category a {
+    color: #333;
+    text-decoration: none;
+}
+
+.settings-category a:hover {
+    text-decoration: underline;
+    color: #0a3d91;
 }

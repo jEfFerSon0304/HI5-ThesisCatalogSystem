@@ -13,6 +13,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <img src="pictures/DASHBOARD.png" width="30" height="30"> Dashboard
         </a>
 
+        <!-- SHARED PAGE (admin + librarian) -->
+        <a href="borrowing-request.php" class="<?= $currentPage === 'borrowing-request.php' ? 'active' : '' ?>">
+            <img src="pictures/REQUEST.png" width="30" height="30"> Requests
+        </a>
+
         <!-- SUPER ADMIN FEATURES -->
         <?php if ($role === 'admin') { ?>
             <a href="manage-thesis.php" class="<?= $currentPage === 'manage-thesis.php' ? 'active' : '' ?>">
@@ -24,10 +29,10 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </a>
         <?php } ?>
 
-        <!-- SHARED PAGE (admin + librarian) -->
-        <a href="borrowing-request.php" class="<?= $currentPage === 'borrowing-request.php' ? 'active' : '' ?>">
-            <img src="pictures/REQUEST.png" width="30" height="30"> Requests
+        <a href="settings.php" class="<?= $currentPage === 'settings.php' ? 'active' : '' ?>">
+            <img src="pictures/SETTINGS.png" width="30" height="30"> Settings
         </a>
+
     </nav>
 
     <!-- LOGOUT -->
