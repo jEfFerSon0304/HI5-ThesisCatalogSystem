@@ -9,6 +9,24 @@
     <link rel="icon" type="image/png" href="user-pictures/logo.png">
     <link rel="stylesheet" href="user-style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        .catalog-table th:last-child,
+        .catalog-table td:last-child {
+            width: 170px !important;
+            white-space: nowrap !important;
+            text-align: center !important;
+        }
+
+        .catalog-table button,
+        .action-btn {
+            min-width: 130px !important;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -29,17 +47,11 @@
             <h2 class="catalog-title">CEIT Thesis Hub</h2>
             <p class="catalog-subtitle">Discover and explore academic research</p>
 
-            <!-- SEARCH BAR -->
             <div class="catalog-search-box">
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search thesis by title, author, or keyword..."
-                    class="catalog-search-input" />
+                <input type="text" id="searchInput" placeholder="Search thesis by title, author, or keyword..." class="catalog-search-input" />
                 <button type="button" class="catalog-search-btn" onclick="loadResults()">Search</button>
             </div>
 
-            <!-- FILTER DROPDOWN -->
             <div class="catalog-filter">
                 <label for="catalog-dept-filter">Filter:</label>
                 <select id="catalog-dept-filter" onchange="loadResults()">
@@ -51,7 +63,6 @@
             </div>
         </section>
 
-        <!-- TABLE SECTION -->
         <section class="catalog-table-section">
             <table class="catalog-table">
                 <thead>
@@ -63,9 +74,7 @@
                         <th>ACTION</th>
                     </tr>
                 </thead>
-                <tbody id="catalogResults">
-                    <!-- Results will load here -->
-                </tbody>
+                <tbody id="catalogResults"></tbody>
             </table>
         </section>
 
@@ -82,7 +91,6 @@
     </main>
 
     <script>
-        // Load thesis dynamically
         function loadResults() {
             const search = document.getElementById('searchInput').value.trim();
             const department = document.getElementById('catalog-dept-filter').value;
@@ -95,7 +103,6 @@
                 });
         }
 
-        // Highlight matches
         function highlightSearch(keyword) {
             if (!keyword) return;
             const regex = new RegExp(`(${keyword})`, 'gi');
@@ -104,9 +111,7 @@
             });
         }
 
-        // Auto-load results on page load
         document.addEventListener('DOMContentLoaded', loadResults);
-        // Live search (instant typing)
         document.getElementById('searchInput').addEventListener('keyup', () => loadResults());
     </script>
 </body>
