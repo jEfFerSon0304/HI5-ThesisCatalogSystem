@@ -43,57 +43,104 @@ if (!$librarian) {
         }
 
         .librarian-profile {
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            width: 80%;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+            margin: 40px auto;
+            width: 85%;
             max-width: 900px;
+            transition: 0.3s ease;
+        }
+
+        .librarian-profile:hover {
+            transform: translateY(-3px);
         }
 
         .profile-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .profile-header h2 {
-            color: #0A3D91;
-            font-size: 24px;
+            color: #0a3d91;
+            font-size: 26px;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: 0.3px;
         }
 
         .profile-info {
-            margin-top: 20px;
+            margin-top: 25px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
         }
 
         .profile-field {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
+            background: linear-gradient(145deg, #f9fbff, #f4f7fc);
+            padding: 16px 18px;
+            border-radius: 10px;
+            border: 1px solid #e1e8f0;
+            box-shadow: 0 2px 6px rgba(10, 61, 145, 0.05);
+            transition: all 0.25s ease;
+
+            /* 🛠 Prevent long text overflow */
+            word-wrap: break-word;
+            /* Allows breaking long strings */
+            overflow-wrap: break-word;
+            /* Modern alternative */
+            word-break: break-word;
+            /* Ensures words wrap properly */
+            white-space: normal;
+            /* Allows multiline wrapping */
+            min-width: 0;
+            /* Fix flex/grid shrink issue */
+        }
+
+        /* Optional: make the email field truncate with "..." if preferred */
+        .profile-field.email {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        .profile-field:hover {
+            background: #eef4ff;
+            border-color: #bcd1ff;
+            transform: translateY(-2px);
         }
 
         .profile-field strong {
-            color: #0A3D91;
+            color: #0a3d91;
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
         }
 
+        /* 🔹 STATUS BADGES */
         .status-badge {
-            padding: 6px 12px;
-            border-radius: 12px;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
             color: #fff;
+            font-weight: 600;
             text-transform: capitalize;
+            font-size: 13px;
+            letter-spacing: 0.3px;
         }
 
         .status-approved {
-            background-color: #4caf50;
+            background-color: #27ae60;
         }
 
         .status-pending {
-            background-color: #ff9800;
+            background-color: #f39c12;
         }
 
         .status-inactive {
@@ -101,31 +148,39 @@ if (!$librarian) {
         }
 
         .status-rejected {
-            background-color: #f44336;
+            background-color: #e74c3c;
         }
 
+        /* ⚙️ ACTIONS */
         .actions {
-            margin-top: 30px;
+            margin-top: 35px;
             text-align: center;
         }
 
         .action-btn {
-            padding: 8px 14px;
-            margin: 4px;
+            padding: 10px 18px;
+            margin: 5px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             color: #fff;
-            cursor: pointer;
-            transition: 0.2s;
             font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
         .approve {
-            background-color: #4caf50;
+            background-color: #27ae60;
         }
 
         .reject {
-            background-color: #f44336;
+            background-color: #e74c3c;
         }
 
         .deactivate {
@@ -133,33 +188,60 @@ if (!$librarian) {
         }
 
         .delete {
-            background-color: #e74c3c;
-        }
-
-        .delete:hover {
             background-color: #c0392b;
         }
 
+        .delete:hover {
+            background-color: #a93226;
+        }
+
+        /* ⬅️ BACK BUTTON */
         .back-btn {
             display: inline-block;
-            background: #0A3D91;
-            color: white;
-            padding: 10px 20px;
+            background: #0a3d91;
+            color: #fff;
+            padding: 10px 22px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: 500;
-            transition: 0.2s;
+            letter-spacing: 0.4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(10, 61, 145, 0.2);
         }
 
         .back-btn:hover {
-            background: #062d6f;
+            background: #094083;
+            transform: translateY(-2px);
         }
 
+        /* 🔸 DIVIDER */
         .divider {
             border: 0;
             height: 2px;
-            background: #ddd;
-            margin: 15px 0;
+            background: #e0e0e0;
+            margin: 25px 0;
+        }
+
+        /* 📱 RESPONSIVE */
+        @media (max-width: 768px) {
+            .librarian-profile {
+                padding: 25px;
+                width: 92%;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile-field {
+                font-size: 14px;
+            }
+
+            .action-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -195,7 +277,7 @@ if (!$librarian) {
                 </div>
 
                 <div class="profile-info">
-                    <div class="profile-field"><strong>Email:</strong> <?= htmlspecialchars($librarian['email']); ?></div>
+                    <div class="profile-field email"><strong>Email:</strong> <?= htmlspecialchars($librarian['email']); ?></div>
                     <div class="profile-field"><strong>Section:</strong> <?= htmlspecialchars($librarian['section']); ?></div>
                     <div class="profile-field"><strong>Status:</strong>
                         <span class="status-badge status-<?= strtolower($librarian['status']); ?>">

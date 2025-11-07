@@ -23,6 +23,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
     <link rel="icon" type="image/png" href="pictures/Logo.png" />
     <link rel="stylesheet" href="style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -128,168 +129,160 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
     </div>
 
     <!-- VIEW MODAL -->
-    <div id="viewModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
+    <div id="viewModal" class="modal-1" style="display: none;">
+        <div class="modal-content-1">
+            <span class="modal-close-1" onclick="closeModal()">&times;</span>
             <h3>Request Details</h3>
             <div id="modal-details"></div>
             <div class="actions" id="modal-actions"></div>
         </div>
     </div>
 
-    <script src="script.js">
-        let currentRequest = null;
-        const rowsPerPage = 10;
-        let currentPage = 1;
-        let allRows = [];
+    <script>
+        // Sidebar toggle
+        const menuIcon = document.querySelector(".menu-icon");
+        const sidebar = document.querySelector(".sidebar");
+        const container = document.querySelector(".container");
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const tableBody = document.getElementById("tableBody");
-            allRows = Array.from(tableBody.querySelectorAll("tr"));
+        menuIcon.addEventListener("click", () => {
+            sidebar.classList.toggle("hidden");
+            container.classList.toggle("full");
+            menuIcon.classList.toggle("active");
 
-            const searchInput = document.getElementById("searchInput");
-            const statusFilter = document.getElementById("statusFilter");
-            const prevPage = document.getElementById("prevPage");
-            const nextPage = document.getElementById("nextPage");
-
-            function filterAndRender() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const selectedStatus = statusFilter.value;
-
-                const filtered = allRows.filter(row => {
-                    const cols = row.querySelectorAll("td");
-                    const name = cols[1]?.textContent.toLowerCase() || "";
-                    const title = cols[2]?.textContent.toLowerCase() || "";
-                    const status = cols[5]?.textContent.trim() || "";
-
-                    const matchesSearch = name.includes(searchTerm) || title.includes(searchTerm);
-                    const matchesStatus = selectedStatus === "all" || status === selectedStatus;
-                    return matchesSearch && matchesStatus;
-                });
-
-                renderTable(filtered);
+            // Optional: change icon to "X"
+            if (menuIcon.textContent === "☰") {
+                menuIcon.textContent = "✖";
+            } else {
+                menuIcon.textContent = "☰";
             }
-
-            function renderTable(filteredRows) {
-                const totalPages = Math.ceil(filteredRows.length / rowsPerPage) || 1;
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const pageRows = filteredRows.slice(start, end);
-
-                tableBody.innerHTML = "";
-                pageRows.forEach(row => tableBody.appendChild(row));
-
-                document.getElementById("currentPage").textContent = currentPage;
-                document.getElementById("totalPages").textContent = totalPages;
-
-                prevPage.disabled = currentPage === 1;
-                nextPage.disabled = currentPage === totalPages;
-            }
-
-            searchInput.addEventListener("input", () => {
-                currentPage = 1;
-                filterAndRender();
-            });
-
-            statusFilter.addEventListener("change", () => {
-                currentPage = 1;
-                filterAndRender();
-            });
-
-            prevPage.addEventListener("click", () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    filterAndRender();
-                }
-            });
-
-            nextPage.addEventListener("click", () => {
-                const filtered = allRows.filter(row => {
-                    const cols = row.querySelectorAll("td");
-                    const name = cols[1]?.textContent.toLowerCase() || "";
-                    const title = cols[2]?.textContent.toLowerCase() || "";
-                    const status = cols[5]?.textContent.trim() || "";
-                    const matchesSearch = name.includes(searchInput.value.toLowerCase()) || title.includes(searchInput.value.toLowerCase());
-                    const matchesStatus = statusFilter.value === "all" || status === statusFilter.value;
-                    return matchesSearch && matchesStatus;
-                });
-
-                const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    filterAndRender();
-                }
-            });
-
-            filterAndRender(); // initial render
         });
 
-        /* Existing modal + status update logic */
-        function openModal(button) {
-            const data = JSON.parse(button.getAttribute('data-row'));
-            currentRequest = data;
+        // Pagination + Filter
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        const tableBody = document.getElementById("tableBody");
+        const allRows = Array.from(tableBody.querySelectorAll("tr"));
+        const searchInput = document.getElementById("searchInput");
+        const statusFilter = document.getElementById("statusFilter");
+        const prevPage = document.getElementById("prevPage");
+        const nextPage = document.getElementById("nextPage");
 
-            const details = document.getElementById('modal-details');
-            const actions = document.getElementById('modal-actions');
+        function filterAndRender() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedStatus = statusFilter.value;
+
+            const filtered = allRows.filter(row => {
+                const cols = row.querySelectorAll("td");
+                const name = cols[1]?.textContent.toLowerCase() || "";
+                const title = cols[2]?.textContent.toLowerCase() || "";
+                const status = cols[5]?.textContent.trim() || "";
+                const matchesSearch = name.includes(searchTerm) || title.includes(searchTerm);
+                const matchesStatus = selectedStatus === "all" || status === selectedStatus;
+                return matchesSearch && matchesStatus;
+            });
+
+            const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const pageRows = filtered.slice(start, end);
+
+            tableBody.innerHTML = "";
+            pageRows.forEach(row => tableBody.appendChild(row));
+
+            document.getElementById("currentPage").textContent = currentPage;
+            document.getElementById("totalPages").textContent = totalPages;
+            prevPage.disabled = currentPage === 1;
+            nextPage.disabled = currentPage === totalPages;
+        }
+
+        searchInput.addEventListener("input", () => {
+            currentPage = 1;
+            filterAndRender();
+        });
+        statusFilter.addEventListener("change", () => {
+            currentPage = 1;
+            filterAndRender();
+        });
+        prevPage.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                filterAndRender();
+            }
+        });
+        nextPage.addEventListener("click", () => {
+            const filtered = allRows.filter(row => row.style.display !== "none");
+            const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+            if (currentPage < totalPages) {
+                currentPage++;
+                filterAndRender();
+            }
+        });
+        filterAndRender();
+
+        // Modal
+        window.openModal = function(button) {
+            const data = JSON.parse(button.getAttribute("data-row"));
+            const details = document.getElementById("modal-details");
+            const actions = document.getElementById("modal-actions");
             const librarianName = data.librarian_name && data.librarian_name !== "null" ? data.librarian_name : "";
 
             let content = `
-        <div class="detail-item"><strong>Request #:</strong> ${data.request_number}</div>
-        <div class="detail-item"><strong>Student Name:</strong> ${data.student_name}</div>
-        <div class="detail-item"><strong>Student No.:</strong> ${data.student_no}</div>
-        <div class="detail-item"><strong>Course & Section:</strong> ${data.course_section}</div>
-        <hr>
-        <div class="detail-item"><strong>Thesis Title:</strong> ${data.title}</div>
-        <div class="detail-item"><strong>Author(s):</strong> ${data.author}</div>
-        <div class="detail-item"><strong>Department:</strong> ${data.department}</div>
-        <div class="detail-item"><strong>Year:</strong> ${data.year}</div>
-        <div class="detail-item"><strong>Date Requested:</strong> ${data.request_date}</div>
-        <div class="detail-item"><strong>Status:</strong> ${data.status}</div>
-    `;
-            if (librarianName !== "") {
-                content += `<div class="detail-item"><strong>Librarian:</strong> ${librarianName}</div>`;
-            }
+                <div class="detail-item"><strong>Request #:</strong> ${data.request_number}</div>
+                <div class="detail-item"><strong>Student Name:</strong> ${data.student_name}</div>
+                <div class="detail-item"><strong>Student No.:</strong> ${data.student_no}</div>
+                <div class="detail-item"><strong>Course & Section:</strong> ${data.course_section}</div>
+                <hr>
+                <div class="detail-item"><strong>Thesis Title:</strong> ${data.title}</div>
+                <div class="detail-item"><strong>Author(s):</strong> ${data.author}</div>
+                <div class="detail-item"><strong>Department:</strong> ${data.department}</div>
+                <div class="detail-item"><strong>Year:</strong> ${data.year}</div>
+                <div class="detail-item"><strong>Date Requested:</strong> ${data.request_date}</div>
+                <div class="detail-item"><strong>Status:</strong> ${data.status}</div>`;
+            if (librarianName) content += `<div class="detail-item"><strong>Librarian:</strong> ${librarianName}</div>`;
             details.innerHTML = content;
 
-            let btns = '';
-            if (data.status === 'Pending') {
-                btns = `<button class='status-btn approve' onclick="updateStatus(${data.request_id}, 'Approved')">Approve</button>
-                <button class='status-btn reject' onclick="updateStatus(${data.request_id}, 'Rejected')">Reject</button>`;
-            } else if (data.status === 'Approved') {
-                btns = `<button class='status-btn return' onclick="updateStatus(${data.request_id}, 'Returned')">Mark as Returned</button>`;
-            } else if (['Returned', 'Rejected'].includes(data.status)) {
-                btns = `<button class='status-btn complete' onclick="updateStatus(${data.request_id}, 'Complete')">Mark as Complete</button>`;
+            let btns = "";
+            if (data.status === "Pending") {
+                btns = `
+                    <button class="status-btn approve" onclick="updateStatus(${data.request_id}, 'Approved')">Approve</button>
+                    <button class="status-btn reject" onclick="updateStatus(${data.request_id}, 'Rejected')">Reject</button>`;
+            } else if (data.status === "Approved") {
+                btns = `<button class="status-btn return" onclick="updateStatus(${data.request_id}, 'Returned')">Mark as Returned</button>`;
+            } else if (["Returned", "Rejected"].includes(data.status)) {
+                btns = `<button class="status-btn complete" onclick="updateStatus(${data.request_id}, 'Complete')">Mark as Complete</button>`;
             } else {
                 btns = `<p style="color:gray;">No further actions available.</p>`;
             }
+
             actions.innerHTML = btns;
-            document.getElementById('viewModal').style.display = 'flex';
-        }
+            document.getElementById("viewModal").style.display = "flex";
+        };
 
         function closeModal() {
-            document.getElementById('viewModal').style.display = 'none';
+            document.getElementById("viewModal").style.display = "none";
         }
 
         function updateStatus(requestId, newStatus) {
             if (!confirm("Are you sure you want to mark this as " + newStatus + "?")) return;
-            fetch('update-request-status.php', {
-                    method: 'POST',
+            fetch("update-request-status.php", {
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: 'request_id=' + requestId + '&new_status=' + newStatus
+                    body: "request_id=" + requestId + "&new_status=" + newStatus
                 })
                 .then(res => res.text())
                 .then(msg => {
                     alert(msg);
                     location.reload();
-                });
+                })
+                .catch(() => alert("Error updating status."));
         }
 
         window.onclick = function(event) {
-            const modal = document.getElementById('viewModal');
+            const modal = document.getElementById("viewModal");
             if (event.target === modal) closeModal();
-        }
+        };
     </script>
 </body>
 

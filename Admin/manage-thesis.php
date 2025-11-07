@@ -177,7 +177,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
     </div>
 
     <!-- EDIT MODAL (unchanged) -->
-    <div class="modal" id="editModal">
+    <div class="modal" id="editModal" style="display: none;">
         <div class="modal-content">
             <span class="close-modal" id="editModalCloseBtn">&times;</span>
             <h3>Edit Thesis</h3>
@@ -215,7 +215,242 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
     <!-- TOAST CONTAINER -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            /* =========================
+               🧭 SIDEBAR TOGGLE
+            ========================= */
+            const menuIcon = document.querySelector(".menu-icon");
+            const sidebar = document.querySelector(".sidebar");
+            const container = document.querySelector(".container");
+
+            menuIcon.addEventListener("click", () => {
+                sidebar.classList.toggle("hidden");
+                container.classList.toggle("full");
+                menuIcon.classList.toggle("active");
+
+                // Optional: change icon to "X"
+                if (menuIcon.textContent === "☰") {
+                    menuIcon.textContent = "✖";
+                } else {
+                    menuIcon.textContent = "☰";
+                }
+            });
+
+            /* =========================
+               📄 ADD THESIS SECTION TOGGLE
+            ========================= */
+            const addThesisBtn = document.getElementById("addThesisBtn");
+            const addThesisFormSection = document.getElementById("addThesisFormSection");
+            const cancelFormBtn = document.getElementById("cancelFormBtn");
+            const thesisOverview = document.getElementById("thesisOverview");
+
+            if (addThesisBtn && addThesisFormSection && cancelFormBtn) {
+                addThesisBtn.addEventListener("click", () => {
+                    thesisOverview.classList.add("hidden");
+                    addThesisFormSection.classList.remove("hidden");
+                });
+
+                cancelFormBtn.addEventListener("click", () => {
+                    addThesisFormSection.classList.add("hidden");
+                    thesisOverview.classList.remove("hidden");
+                });
+            }
+
+            /* =========================
+               🔍 SEARCH, FILTER & PAGINATION
+            ========================= */
+            const searchInput = document.getElementById("searchInput");
+            const tableBody = document.querySelector("tbody");
+            const allRows = Array.from(tableBody.querySelectorAll("tr"));
+            const filterToggleBtn = document.getElementById("filterToggleBtn");
+            const filterMenu = document.getElementById("filterMenu");
+            const filterDept = document.querySelectorAll(".filter-dept");
+            const filterAvail = document.querySelectorAll(".filter-availability");
+            const prevPage = document.getElementById("prevPage");
+            const nextPage = document.getElementById("nextPage");
+            const currentPageDisplay = document.getElementById("currentPage");
+            const totalPagesDisplay = document.getElementById("totalPages");
+
+            let currentPage = 1;
+            const rowsPerPage = 10;
+
+            // Filter dropdown toggle
+            if (filterToggleBtn && filterMenu) {
+                filterToggleBtn.addEventListener("click", () => {
+                    filterMenu.classList.toggle("hidden");
+                });
+
+                document.addEventListener("click", (e) => {
+                    if (!filterToggleBtn.contains(e.target) && !filterMenu.contains(e.target)) {
+                        filterMenu.classList.add("hidden");
+                    }
+                });
+            }
+
+            // Apply filters and search
+            function filterAndRender() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedDepts = Array.from(filterDept)
+                    .filter(chk => chk.checked)
+                    .map(chk => chk.value);
+                const selectedAvail = Array.from(filterAvail)
+                    .filter(chk => chk.checked)
+                    .map(chk => chk.value);
+
+                let filtered = allRows.filter(row => {
+                    const title = row.children[0].textContent.toLowerCase();
+                    const author = row.children[1].textContent.toLowerCase();
+                    const dept = row.children[3].textContent;
+                    const availability = row.children[4].textContent;
+
+                    const matchesSearch = title.includes(searchTerm) || author.includes(searchTerm);
+                    const matchesDept = selectedDepts.length === 0 || selectedDepts.includes(dept);
+                    const matchesAvail = selectedAvail.length === 0 || selectedAvail.includes(availability);
+
+                    return matchesSearch && matchesDept && matchesAvail;
+                });
+
+                renderTable(filtered);
+            }
+
+            function renderTable(filteredRows) {
+                const totalPages = Math.ceil(filteredRows.length / rowsPerPage) || 1;
+                currentPage = Math.min(currentPage, totalPages);
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                const pageRows = filteredRows.slice(start, end);
+
+                tableBody.innerHTML = "";
+                pageRows.forEach(row => tableBody.appendChild(row));
+
+                currentPageDisplay.textContent = currentPage;
+                totalPagesDisplay.textContent = totalPages;
+
+                prevPage.disabled = currentPage === 1;
+                nextPage.disabled = currentPage === totalPages;
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener("input", () => {
+                    currentPage = 1;
+                    filterAndRender();
+                });
+            }
+
+            [...filterDept, ...filterAvail].forEach(chk => {
+                chk.addEventListener("change", () => {
+                    currentPage = 1;
+                    filterAndRender();
+                });
+            });
+
+            prevPage.addEventListener("click", () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    filterAndRender();
+                }
+            });
+
+            nextPage.addEventListener("click", () => {
+                currentPage++;
+                filterAndRender();
+            });
+
+            filterAndRender(); // initial load
+
+            /* =========================
+               ✏️ EDIT MODAL FUNCTIONS
+            ========================= */
+            const editModal = document.getElementById("editModal");
+            const editModalCloseBtn = document.getElementById("editModalCloseBtn");
+            const editForm = document.getElementById("editForm");
+            const deleteBtn = document.getElementById("deleteBtn");
+            const toastContainer = document.getElementById("toastContainer");
+
+            window.openEditModal = function(data) {
+                document.getElementById("edit_thesis_id").value = data.thesis_id;
+                document.getElementById("edit_title").value = data.title;
+                document.getElementById("edit_author").value = data.author;
+                document.getElementById("edit_year").value = data.year;
+                document.getElementById("edit_department").value = data.department;
+                document.getElementById("edit_availability").value = data.availability;
+                document.getElementById("edit_abstract").value = data.abstract || "";
+                document.getElementById("lastUpdatedText").textContent = "Last Updated: " + (data.last_updated || "—");
+                editModal.style.display = "flex";
+            };
+
+            function closeModal() {
+                editModal.style.display = "none";
+            }
+
+            if (editModalCloseBtn) {
+                editModalCloseBtn.addEventListener("click", closeModal);
+            }
+
+            window.addEventListener("click", (e) => {
+                if (e.target === editModal) closeModal();
+            });
+
+            // Save edits
+            if (editForm) {
+                editForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+
+                    const formData = new FormData(editForm);
+                    fetch("update_thesis.php", {
+                            method: "POST",
+                            body: formData
+                        })
+                        .then(res => res.text())
+                        .then(msg => {
+                            showToast(msg, "success");
+                            closeModal();
+                            setTimeout(() => location.reload(), 800);
+                        })
+                        .catch(() => showToast("Error updating thesis.", "error"));
+                });
+            }
+
+            // Delete thesis
+            if (deleteBtn) {
+                deleteBtn.addEventListener("click", () => {
+                    const thesisId = document.getElementById("edit_thesis_id").value;
+                    if (!confirm("Are you sure you want to delete this thesis?")) return;
+
+                    fetch("delete_thesis.php", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: `thesis_id=${thesisId}`
+                        })
+                        .then(res => res.text())
+                        .then(msg => {
+                            showToast(msg, "info");
+                            closeModal();
+                            setTimeout(() => location.reload(), 800);
+                        })
+                        .catch(() => showToast("Error deleting thesis.", "error"));
+                });
+            }
+
+            /* =========================
+               🔔 TOAST FUNCTION
+            ========================= */
+            function showToast(message, type = "info") {
+                const toast = document.createElement("div");
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                toastContainer.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.remove();
+                }, 2500);
+            }
+        });
+    </script>
+
 </body>
 
 </html>

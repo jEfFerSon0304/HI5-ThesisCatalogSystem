@@ -3,8 +3,8 @@ include "../PHP/db_connect.php";
 session_start();
 date_default_timezone_set('Asia/Manila');
 
-// 🔒 Redirect if not logged in
-if (!isset($_SESSION['role'])) {
+// 🔒 Redirect if not logged in or not admin
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: index.php");
     exit();
 }
@@ -56,7 +56,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
         }
 
         .action-btn {
-            padding: 6px 10px;
+            padding: 6px 12px;
             margin: 2px;
             border: none;
             border-radius: 6px;
@@ -66,32 +66,8 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
             font-size: 13px;
         }
 
-        .approve {
-            background-color: #4caf50;
-        }
-
-        .reject {
-            background-color: #f44336;
-        }
-
-        .deactivate {
-            background-color: #9e9e9e;
-        }
-
         .view {
             background-color: #3498db;
-        }
-
-        .approve:hover {
-            background-color: #43a047;
-        }
-
-        .reject:hover {
-            background-color: #e53935;
-        }
-
-        .deactivate:hover {
-            background-color: #757575;
         }
 
         .view:hover {
@@ -206,37 +182,19 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                             while ($row = $result->fetch_assoc()) {
                                 $statusClass = "status-" . strtolower($row['status']);
 
-                                echo "<tr>
-                                    <td>{$row['librarian_id']}</td>
-                                    <td>{$row['fullname']}</td>
-                                    <td>{$row['email']}</td>
-                                    <td>{$row['section']}</td>
-                                    <td><span class='status-badge $statusClass'>{$row['status']}</span></td>
-                                    <td>" . ($row['last_login'] ?? 'N/A') . "</td>
-                                    <td>";
-
-                                // ✅ Buttons
-                                if ($row['status'] === 'pending') {
-                                    echo "
-                                        <button class='action-btn approve' onclick=\"updateStatus({$row['librarian_id']}, 'approved')\">Approve</button>
-                                        <button class='action-btn reject' onclick=\"updateStatus({$row['librarian_id']}, 'rejected')\">Reject</button>
-                                    ";
-                                } elseif ($row['status'] === 'approved') {
-                                    echo "
-                                        <button class='action-btn deactivate' onclick=\"updateStatus({$row['librarian_id']}, 'inactive')\">Deactivate</button>
-                                    ";
-                                } elseif ($row['status'] === 'inactive') {
-                                    echo "
-                                        <button class='action-btn approve' onclick=\"updateStatus({$row['librarian_id']}, 'approved')\">Reactivate</button>
-                                    ";
-                                }
-
-                                // 👁️ View Profile Button
                                 echo "
-                                    <button class='action-btn view' onclick=\"window.location.href='view-librarian.php?id={$row['librarian_id']}'\">View</button>
+                                    <tr>
+                                        <td>{$row['librarian_id']}</td>
+                                        <td>{$row['fullname']}</td>
+                                        <td>{$row['email']}</td>
+                                        <td>{$row['section']}</td>
+                                        <td><span class='status-badge $statusClass'>{$row['status']}</span></td>
+                                        <td>" . ($row['last_login'] ?? 'N/A') . "</td>
+                                        <td>
+                                            <button class='action-btn view' onclick=\"window.location.href='view-librarian.php?id={$row['librarian_id']}'\">View</button>
+                                        </td>
+                                    </tr>
                                 ";
-
-                                echo "</td></tr>";
                             }
                         } else {
                             echo "<tr><td colspan='7'>No librarian records found.</td></tr>";
@@ -249,8 +207,62 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
         </main>
     </div>
 
-    <!-- 🧠 Scripts -->
-    <script src="script.js"></script>
+    <script>
+        const menuIcon = document.querySelector(".menu-icon");
+        const sidebar = document.querySelector(".sidebar");
+        const container = document.querySelector(".container");
+
+        menuIcon.addEventListener("click", () => {
+            sidebar.classList.toggle("hidden");
+            container.classList.toggle("full");
+            menuIcon.classList.toggle("active");
+
+            // Optional: change icon to "X"
+            if (menuIcon.textContent === "☰") {
+                menuIcon.textContent = "✖";
+            } else {
+                menuIcon.textContent = "☰";
+            }
+        });
+
+        // Search, filter, sort
+        const searchInput = document.getElementById("searchInput");
+        const statusFilter = document.getElementById("statusFilter");
+        const sortBy = document.getElementById("sortBy");
+        const tableBody = document.querySelector("tbody");
+
+        function filterAndSort() {
+            const rows = Array.from(tableBody.querySelectorAll("tr"));
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedStatus = statusFilter.value;
+
+            let filtered = rows.filter(row => {
+                const cells = row.querySelectorAll("td");
+                const name = cells[1].textContent.toLowerCase();
+                const email = cells[2].textContent.toLowerCase();
+                const status = cells[4].textContent.toLowerCase();
+                const matchSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                const matchStatus = selectedStatus === "" || status.includes(selectedStatus);
+                return matchSearch && matchStatus;
+            });
+
+            filtered.sort((a, b) => {
+                const aCells = a.querySelectorAll("td");
+                const bCells = b.querySelectorAll("td");
+                if (sortBy.value === "name") return aCells[1].textContent.localeCompare(bCells[1].textContent);
+                if (sortBy.value === "status") return aCells[4].textContent.localeCompare(bCells[4].textContent);
+                return parseInt(bCells[0].textContent) - parseInt(aCells[0].textContent);
+            });
+
+            tableBody.innerHTML = "";
+            filtered.forEach(row => tableBody.appendChild(row));
+        }
+
+        [searchInput, statusFilter, sortBy].forEach(el => {
+            el.addEventListener("input", filterAndSort);
+            el.addEventListener("change", filterAndSort);
+        });
+    </script>
 </body>
 
 </html>

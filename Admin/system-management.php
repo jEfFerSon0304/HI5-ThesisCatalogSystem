@@ -31,6 +31,183 @@ if ($tableExists && $tableExists->num_rows > 0) {
     <link rel="icon" type="image/png" href="pictures/Logo.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* 🌐 Base Layout */
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f4f7fb;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 🧭 Main Section */
+        .settings-page {
+            padding: 40px 60px;
+            min-height: 100vh;
+            background: #f4f7fb;
+        }
+
+        .welcome-section h2 {
+            font-size: 26px;
+            color: #0A3D91;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .divider {
+            border: none;
+            height: 2px;
+            background: #e0e0e0;
+            margin: 15px 0 30px;
+        }
+
+        /* 🧱 Settings Category Cards */
+        .settings-category {
+            background: #ffffff;
+            padding: 30px 35px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.25s ease;
+        }
+
+        .settings-category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .settings-category h3 {
+            color: #0A3D91;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ⏰ Time Input Form */
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .time-inputs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .time-inputs input[type="time"] {
+            padding: 10px 14px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #cfd8e3;
+            background: #f9fbff;
+            color: #333;
+            transition: 0.3s ease;
+        }
+
+        .time-inputs input[type="time"]:focus {
+            border-color: #0A3D91;
+            box-shadow: 0 0 0 3px rgba(10, 61, 145, 0.15);
+            background: #fff;
+        }
+
+        .time-separator {
+            font-weight: 600;
+            color: #0A3D91;
+            font-size: 15px;
+        }
+
+        /* 🧭 Buttons */
+        .settings-form button,
+        .settings-category form button {
+            background: #0A3D91;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s ease;
+            font-size: 15px;
+            align-self: flex-start;
+            box-shadow: 0 3px 10px rgba(10, 61, 145, 0.2);
+        }
+
+        .settings-form button:hover,
+        .settings-category form button:hover {
+            background: #083377;
+            transform: translateY(-2px);
+        }
+
+        /* ⚠️ Reset Button */
+        .settings-category form[action="reset-borrowing.php"] button {
+            background: #e74c3c;
+            box-shadow: 0 3px 10px rgba(231, 76, 60, 0.25);
+        }
+
+        .settings-category form[action="reset-borrowing.php"] button:hover {
+            background: #c0392b;
+        }
+
+        /* 💾 Backup Button */
+        .settings-category form[action="backup-database.php"] button {
+            background: #1e88e5;
+            box-shadow: 0 3px 10px rgba(30, 136, 229, 0.25);
+        }
+
+        .settings-category form[action="backup-database.php"] button:hover {
+            background: #1565c0;
+        }
+
+        /* 🔔 Alert Box */
+        .alert-box {
+            background: #e3f2fd;
+            border-left: 5px solid #0A3D91;
+            padding: 12px 18px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #0A3D91;
+        }
+
+        /* 📱 Responsive */
+        @media (max-width: 768px) {
+            .settings-page {
+                padding: 25px;
+            }
+
+            .settings-category {
+                padding: 20px;
+            }
+
+            .time-inputs {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .settings-category h3 {
+                font-size: 18px;
+            }
+
+            .settings-form button,
+            .settings-category form button {
+                width: 100%;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -99,21 +276,21 @@ if ($tableExists && $tableExists->num_rows > 0) {
             </section>
 
 
-            <!-- Backup Database -->
-            <section class="settings-category">
+
+            <!-- <section class="settings-category">
                 <h3>💾 Backup Database</h3>
                 <form action="backup-database.php" method="POST">
                     <button type="submit">⬇️ Download Backup</button>
                 </form>
             </section>
 
-            <!-- Reset Borrow Requests -->
+            
             <section class="settings-category">
                 <h3>🧹 Reset All Borrowing Requests</h3>
                 <form action="reset-borrowing.php" method="POST" onsubmit="return confirm('Are you sure? This cannot be undone.')">
                     <button type="submit">⚠️ Reset Requests</button>
                 </form>
-            </section>
+            </section> -->
         </main>
     </div>
 </body>
