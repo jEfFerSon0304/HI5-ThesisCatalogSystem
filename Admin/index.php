@@ -11,7 +11,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $role = $_POST['role'];
 
+    // 🕓 Get library hours (if any)
+    $open_time = null;
+    $close_time = null;
+    $checkTable = $conn->query("SHOW TABLES LIKE 'tbl_system_settings'");
+    if ($checkTable && $checkTable->num_rows > 0) {
+        $res = $conn->query("SELECT setting_key, setting_value FROM tbl_system_settings WHERE setting_key IN ('library_open_time', 'library_close_time')");
+        while ($row = $res->fetch_assoc()) {
+            if ($row['setting_key'] === 'library_open_time') $open_time = $row['setting_value'];
+            if ($row['setting_key'] === 'library_close_time') $close_time = $row['setting_value'];
+        }
+    }
+
     if ($role === 'admin') {
+        // ✅ Admin login (no time restriction)
         $hashed = md5($password);
         $stmt = $conn->prepare("SELECT * FROM admin WHERE username = ? AND password = ?");
         $stmt->bind_param("ss", $username, $hashed);
@@ -28,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "❌ Invalid Super Admin username or password.";
         }
     } elseif ($role === 'librarian') {
+        // 🧠 Librarian login (with time restriction)
         $email = $username;
         $stmt = $conn->prepare("SELECT * FROM tbl_librarians WHERE email = ?");
         $stmt->bind_param("s", $email);
@@ -37,24 +51,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
 
-            if ($user['status'] === 'pending') {
-                $error = "🕓 Your account is still pending approval by the admin.";
-            } elseif ($user['status'] === 'inactive') {
-                $error = "🚫 Your account has been deactivated. Please contact the admin.";
-            } elseif (password_verify($password, $user['password'])) {
-                $_SESSION['librarian_id'] = $user['librarian_id'];
-                $_SESSION['fullname'] = $user['fullname'];
-                $_SESSION['section'] = $user['section'];
-                $_SESSION['role'] = 'librarian';
+            // 🕓 Time restriction check
+            if ($open_time && $close_time) {
+                $current_time = date('H:i');
+                if ($current_time < $open_time || $current_time > $close_time) {
+                    $error = "⏰ The library system is closed. Please log in between $open_time and $close_time.";
+                }
+            }
 
-                $update = $conn->prepare("UPDATE tbl_librarians SET last_login = NOW() WHERE librarian_id = ?");
-                $update->bind_param("i", $user['librarian_id']);
-                $update->execute();
+            // Only proceed if within allowed time
+            if (empty($error)) {
+                if ($user['status'] === 'pending') {
+                    $error = "🕓 Your account is still pending approval by the admin.";
+                } elseif ($user['status'] === 'inactive') {
+                    $error = "🚫 Your account has been deactivated. Please contact the admin.";
+                } elseif (password_verify($password, $user['password'])) {
+                    $_SESSION['librarian_id'] = $user['librarian_id'];
+                    $_SESSION['fullname'] = $user['fullname'];
+                    $_SESSION['section'] = $user['section'];
+                    $_SESSION['role'] = 'librarian';
 
-                header("Location: dashboard.php");
-                exit();
-            } else {
-                $error = "❌ Incorrect password.";
+                    $update = $conn->prepare("UPDATE tbl_librarians SET last_login = NOW() WHERE librarian_id = ?");
+                    $update->bind_param("i", $user['librarian_id']);
+                    $update->execute();
+
+                    header("Location: dashboard.php");
+                    exit();
+                } else {
+                    $error = "❌ Incorrect password.";
+                }
             }
         } else {
             $error = "⚠️ Librarian account not found.";
@@ -84,19 +109,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h2>CEIT Thesis Hub Login</h2>
 
                 <form method="POST" action="">
-                    <!-- Username / Email -->
                     <div class="input-group">
                         <input type="text" name="username" placeholder="Username or Email" required />
                         <img src="pictures/user.png" class="icon" />
                     </div>
 
-                    <!-- Password -->
                     <div class="input-group">
                         <input type="password" name="password" placeholder="Password" required autocomplete="off" oncopy="return false" onpaste="return false">
                         <img src="pictures/lock.png" class="icon" />
                     </div>
 
-                    <!-- Role -->
                     <div class="input-group" style="margin-bottom: 10px;">
                         <select name="role" required>
                             <option value="" disabled selected>Select Role</option>
