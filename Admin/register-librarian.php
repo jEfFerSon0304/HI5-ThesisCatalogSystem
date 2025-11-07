@@ -16,37 +16,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($password !== $confirm) {
         $message = "⚠️ Passwords do not match. Please try again.";
     } else {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        // ✅ Check if email already exists
+        $checkEmail = $conn->prepare("SELECT COUNT(*) AS c FROM tbl_librarians WHERE email = ?");
+        $checkEmail->bind_param("s", $email);
+        $checkEmail->execute();
+        $emailExists = $checkEmail->get_result()->fetch_assoc()['c'] > 0;
 
-        // 1️⃣ Check if an active librarian already exists in this section
-        $check = $conn->prepare("SELECT COUNT(*) AS c FROM tbl_librarians WHERE section=? AND status='active'");
-        $check->bind_param("s", $section);
-        $check->execute();
-        $count = $check->get_result()->fetch_assoc()['c'];
-
-        // 2️⃣ Determine status
-        $status = ($count == 0) ? 'active' : 'pending';
-
-        // 3️⃣ Insert librarian record
-        $insert = $conn->prepare("
-            INSERT INTO tbl_librarians (fullname, email, password, section, status)
-            VALUES (?, ?, ?, ?, ?)
-        ");
-        $fullname = $firstname . ' ' . $lastname;
-        $insert->bind_param("sssss", $fullname, $email, $hashedPassword, $section, $status);
-
-        if ($insert->execute()) {
-            if ($status === 'active') {
-                $message = "✅ Registration successful! You are now an active librarian.";
-            } else {
-                $message = "🕓 Registration submitted. Awaiting admin approval.";
-            }
+        if ($emailExists) {
+            $message = "⚠️ Email already exists. Please use a different one.";
         } else {
-            $message = "⚠️ Something went wrong. Please try again.";
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            // 1️⃣ Check if an active librarian already exists in this section
+            $check = $conn->prepare("SELECT COUNT(*) AS c FROM tbl_librarians WHERE section=? AND status='active'");
+            $check->bind_param("s", $section);
+            $check->execute();
+            $count = $check->get_result()->fetch_assoc()['c'];
+
+            // 2️⃣ Determine status
+            $status = ($count == 0) ? 'active' : 'pending';
+
+            // 3️⃣ Insert librarian record
+            $insert = $conn->prepare("
+                INSERT INTO tbl_librarians (fullname, email, password, section, status)
+                VALUES (?, ?, ?, ?, ?)
+            ");
+            $fullname = $firstname . ' ' . $lastname;
+            $insert->bind_param("sssss", $fullname, $email, $hashedPassword, $section, $status);
+
+            if ($insert->execute()) {
+                if ($status === 'active') {
+                    $message = "✅ Registration successful! You are now an active librarian.";
+                    header("Location: index.php");
+                    exit();
+                } else {
+                    $message = "🕓 Registration submitted. Awaiting admin approval.";
+                    header("Location: ../home.html");
+                    exit();
+                }
+            } else {
+                $message = "⚠️ Something went wrong. Please try again.";
+            }
         }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

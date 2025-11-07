@@ -24,24 +24,43 @@ if ($role === 'admin') {
 }
 
 $stmt->execute();
-$user = $stmt->get_result()->fetch_assoc();
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result ? $result->fetch_assoc() : null;
+
+// 🧱 Prevent null warning
+if (!$user) {
+    $user = [
+        'username' => '',
+        'fullname' => '',
+        'section' => '',
+        'email' => ''
+    ];
+}
+
 
 // 🧠 Handle Update Request
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($role === 'admin') {
         $new_username = trim($_POST['username']);
 
-        $update = $conn->prepare("UPDATE admin SET username = ?, email = ?, profile_pic = ? WHERE username = ?");
-        $update->bind_param("ssss", $new_username, $email, $username);
+        // Update only username for admin
+        $update = $conn->prepare("UPDATE admin SET username = ? WHERE username = ?");
+        $update->bind_param("ss", $new_username, $username);
     } else {
         $fullname = trim($_POST['fullname']);
         $section = trim($_POST['section']);
+        $email = trim($_POST['email']);
 
-        $update = $conn->prepare("UPDATE tbl_librarians SET fullname = ?, section = ?, email = ?, profile_pic = ? WHERE librarian_id = ?");
-        $update->bind_param("ssssi", $fullname, $section, $librarian_id);
+        // Update for librarian (no profile pic)
+        $update = $conn->prepare("UPDATE tbl_librarians SET fullname = ?, section = ?, email = ? WHERE librarian_id = ?");
+        $update->bind_param("sssi", $fullname, $section, $email, $librarian_id);
     }
 
     if ($update->execute()) {
+        if ($role === 'admin') {
+            $_SESSION['admin'] = $new_username; // Update session username
+        }
         $message = "✅ Profile updated successfully!";
     } else {
         $message = "❌ Error updating profile: " . $conn->error;
@@ -83,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <?php if (!empty($message)) echo "<p style='color:green;'>$message</p>"; ?>
 
-            <form method="POST" enctype="multipart/form-data" class="profile-form">
+            <form method="POST" class="profile-form">
 
                 <?php if ($role === 'admin'): ?>
                     <div class="form-group">
@@ -98,6 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="form-group">
                         <label>Section:</label>
                         <input type="text" name="section" value="<?= htmlspecialchars($user['section']) ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
                     </div>
                 <?php endif; ?>
 

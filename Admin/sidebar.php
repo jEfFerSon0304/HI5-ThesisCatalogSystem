@@ -6,6 +6,20 @@
 $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+// Safely get $role from the session if not already defined
+if (!isset($role)) {
+    $role = isset($_SESSION['role']) ? $_SESSION['role'] : null;
+}
+
+$currentPage = basename($_SERVER['PHP_SELF']);
+?>
+
+
 <aside class="sidebar">
     <nav>
         <!-- DASHBOARD (visible to all) -->
@@ -27,10 +41,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <a href="manage-librarians.php" class="<?= $currentPage === 'manage-librarians.php' ? 'active' : '' ?>">
                 <img src="pictures/user.png" width="30" height="30"> Manage Librarians
             </a>
+
+
         <?php } ?>
 
         <a href="settings.php" class="<?= $currentPage === 'settings.php' ? 'active' : '' ?>">
-            <img src="pictures/SETTINGS.png" width="30" height="30"> Settings
+            <img src="pictures/settings.png" width="30" height="30"> Settings
         </a>
 
     </nav>

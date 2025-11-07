@@ -99,12 +99,12 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 <table>
                     <thead>
                         <tr>
-                            <th>Request #</th>
-                            <th>Student Name</th>
-                            <th>Thesis Title</th>
-                            <th>Department</th>
-                            <th>Date Requested</th>
-                            <th>Status</th>
+                            <th style="width: 5%;">Request #</th>
+                            <th style="width: 15%;">Student Name</th>
+                            <th style="width: 35%;">Thesis Title</th>
+                            <th style="width: 20%;">Department</th>
+                            <th style="width: 15%;">Date Requested</th>
+                            <th style="width: 15%;">Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -130,7 +130,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                       <td>{$row['student_name']}</td>
                       <td>{$row['title']}</td>
                       <td>{$row['department']}</td>
-                      <td>{$row['request_date']}</td>
+                      <td>" . date('Y-m-d', strtotime($row['request_date'])) . "</td>
                       <td style='color:$statusColor; font-weight:600;'>{$row['status']}</td>
                     </tr>
                   ";

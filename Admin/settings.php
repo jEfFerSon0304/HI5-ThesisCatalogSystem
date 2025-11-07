@@ -60,7 +60,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 <section class="settings-category">
                     <h3>🛠️ System Management</h3>
                     <ul>
-                        <li><a href="#">Change Library Open Hours</a></li>
+                        <li><a href="system-management.php">Change Library Open Hours</a></li>
                         <li><a href="#">Backup Database (Manual or One-Click)</a></li>
                         <li><a href="#">Reset All Borrowing Requests</a></li>
                     </ul>

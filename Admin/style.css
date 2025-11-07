@@ -1353,3 +1353,24 @@ textarea {
     text-decoration: underline;
     color: #0a3d91;
 }
+
+/* System management */
+
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.time-inputs input[type="time"] {
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: "Poppins", sans-serif;
+}
+
+.time-separator {
+    font-weight: 500;
+    color: #333;
+}
