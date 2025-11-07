@@ -81,12 +81,28 @@
 
 
         <footer>
-            <img src="user-pictures/logo.png" class="footer-logo">
+            <img src="user-pictures/logo.png" class="footer-logo" />
             <h3>PLV CEIT THESIS CATALOG</h3>
             <div class="footer-info">
-                <p><img src="user-pictures/location.png" class="footer-info-logo"> 3rd Floor, CEIT Building, Main PLV Campus, Tongco St., Maysan, Valenzuela City</p>
-                <p><img src="user-pictures/email.png" class="footer-info-logo"> loremipsum@plv.edu.ph</p>
-                <p><img src="user-pictures/world-wide-web.png" class="footer-info-logo"> plv.edu.ph</p>
+                <p>
+                    <img
+                        src="user-pictures/location.png"
+                        class="footer-info-logo" />
+                    3rd Floor, CEIT Building, Main PLV Campus, Tongco St.,
+                    Maysan, Valenzuela City
+                </p>
+                <p>
+                    <img
+                        src="user-pictures/email.png"
+                        class="footer-info-logo" />
+                    loremipsum@plv.edu.ph
+                </p>
+                <p>
+                    <img
+                        src="user-pictures/world-wide-web.png"
+                        class="footer-info-logo" />
+                    plv.edu.ph
+                </p>
             </div>
             <div class="copyright">Copyright © 2025</div>
         </footer>

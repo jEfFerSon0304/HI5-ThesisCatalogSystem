@@ -77,13 +77,13 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 <table id="requestTable">
                     <thead>
                         <tr>
-                            <th>Request #</th>
-                            <th>Student Name</th>
-                            <th>Thesis Title</th>
-                            <th>Department</th>
-                            <th>Date Requested</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th style="width: 10%;">Request #</th>
+                            <th style="width: 15%;">Student Name</th>
+                            <th style="width: 35%;">Thesis Title</th>
+                            <th style="width: 15%;">Department</th>
+                            <th style="width: 15%;">Date Requested</th>
+                            <th style="width: 10%;">Status</th>
+                            <th style="width: 10%;">Action</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -105,7 +105,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
 
                                 echo "
                     <tr>
-                        <td>{$row['request_number']}</td>
+                        <td >{$row['request_number']}</td>
                         <td>{$row['student_name']}</td>
                         <td>{$row['title']}</td>
                         <td>{$row['department']}</td>
@@ -137,7 +137,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
         </div>
     </div>
 
-    <script>
+    <script src="script.js">
         let currentRequest = null;
         const rowsPerPage = 10;
         let currentPage = 1;

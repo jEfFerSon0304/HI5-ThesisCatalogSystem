@@ -604,3 +604,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initial render
     filterAndSearch();
 });
+
+// sidebar nigga
+
+const menuIcon = document.querySelector(".menu-icon");
+const sidebar = document.querySelector(".sidebar");
+const container = document.querySelector(".container");
+
+menuIcon.addEventListener("click", () => {
+    sidebar.classList.toggle("hidden");
+    container.classList.toggle("full");
+    menuIcon.classList.toggle("active");
+
+    // Optional: change icon to "X"
+    if (menuIcon.textContent === "☰") {
+        menuIcon.textContent = "✖";
+    } else {
+        menuIcon.textContent = "☰";
+    }
+});

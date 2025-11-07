@@ -9,104 +9,162 @@
 /* ================================
    ADMIN LOGIN PAGE
    ================================ */
-
 .login-main {
-    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.login-container {
-    background-color: #f2f8f8;
     width: 100%;
-    max-width: 400px;
-    padding: 50px 30px;
-    border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-    text-align: center;
+    height: 100%;
 }
 
-.logo {
-    width: 120px;
+/* ===== LOGIN BOX ===== */
+.login-container {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    padding: 40px 50px;
+    width: 400px;
+    text-align: center;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.login-box img.logo {
+    width: 85px;
+    height: 85px;
     margin-bottom: 15px;
 }
 
 .login-box h2 {
-    font-family: "Poppins", sans-serif;
-    color: #0b3a75;
-    font-size: 22px;
+    color: #0a3d91;
     font-weight: 700;
     margin-bottom: 25px;
 }
 
+/* ===== INPUT GROUPS ===== */
 .input-group {
     position: relative;
-    margin: 10px auto;
-    width: 100%;
+    margin-bottom: 18px;
 }
 
-.input-group input {
-    font-family: "Poppins", sans-serif;
+.input-group input,
+.input-group select {
     width: 100%;
-    padding: 10px 40px 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: bold;
+    padding: 12px 40px 12px 12px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.95rem;
     outline: none;
+    transition: all 0.2s ease;
 }
 
-.icon {
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #0a3d91;
+    box-shadow: 0 0 0 3px rgba(10, 61, 145, 0.15);
+}
+
+.input-group img.icon {
     position: absolute;
     right: 12px;
-    top: 10px;
-    width: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
 }
 
+/* ===== LOGIN BUTTON ===== */
 .login-btn {
-    background-color: #0b3a75;
-    color: white;
-    border: none;
-    padding: 10px 30px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 14px;
+    width: 100%;
+    padding: 12px;
+    background-color: #0a3d91;
+    color: #fff;
+    font-size: 1rem;
     font-weight: 600;
-    margin-top: 15px;
-    width: 50%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.1s ease;
 }
 
 .login-btn:hover {
-    background-color: #092e5d;
+    background-color: #134dbb;
 }
 
+.login-btn:active {
+    transform: scale(0.98);
+}
+
+/* ===== FORGOT LINK ===== */
 .forgot-link {
-    font-family: "Poppins", sans-serif;
     display: block;
     margin-top: 10px;
-    font-size: 12px;
-    color: #333;
+    color: #0a3d91;
+    font-size: 0.9rem;
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 .forgot-link:hover {
-    text-decoration: underline;
+    color: #134dbb;
 }
 
+/* ===== REGISTER LINK ===== */
+.login-box p {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.login-box p a {
+    color: #0a3d91;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.login-box p a:hover {
+    color: #134dbb;
+}
+
+/* ===== ERROR MESSAGE ===== */
+.login-box p[style*="color:red"] {
+    background: #ffeaea;
+    border: 1px solid #ffb3b3;
+    color: #d32f2f !important;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 /* ===============================
    HEADER (Bluish Top Bar)
    =============================== */
 .main-header {
     width: 100%;
     height: 70px;
-    background-color: #0a3d91; /* Deep bluish tone */
+    background-color: #0a3d91;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #ffffff;
     padding: 0 25px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: fixed; /* important: make it float above */
+    top: 0;
+    left: 0;
+    z-index: 200; /* higher than sidebar */
 }
 
 .header-left {
@@ -278,9 +336,11 @@
    MAIN CONTENT AREA
    =============================== */
 main {
+    margin-top: 70px;
     padding: 30px 40px;
     background-color: #ffffff;
     overflow-y: auto;
+    width: 100%;
 }
 
 main h2 {
@@ -544,51 +604,95 @@ th {
 .filter-dropdown {
     position: relative;
     display: inline-block;
+    font-family: "Poppins", sans-serif;
 }
 
+/* 🔘 Filter Button */
 .filter-dropdown button {
-    padding: 8px 12px;
+    padding: 8px 14px;
     background-color: #1e3a8a;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+.filter-dropdown button:hover {
+    background-color: #2c4db7;
+    transform: translateY(-1px);
+}
+
+.filter-dropdown button:active {
+    transform: translateY(1px);
+}
+
+/* 📋 Dropdown Menu */
 .filter-menu {
     position: absolute;
     top: 110%;
     left: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     z-index: 50;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    min-width: 220px;
+    animation: fadeIn 0.2s ease-in-out;
 }
 
 .filter-menu.hidden {
     display: none;
 }
 
+/* ☑️ Checkbox labels */
 .filter-menu label {
     font-size: 0.9rem;
     color: #333;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
+.filter-menu label:hover {
+    background-color: #f3f4f6;
+}
+
+/* 🔲 Checkbox styling */
+.filter-menu input[type="checkbox"] {
+    accent-color: #1e3a8a;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* 🧭 Divider */
 .filter-menu hr {
     border: none;
-    border-top: 1px solid #e0e0e0;
-    margin: 5px 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 4px 0;
+}
+
+/* ✨ Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Pagination */
@@ -1373,4 +1477,93 @@ textarea {
 .time-separator {
     font-weight: 500;
     color: #333;
+}
+
+/* Sidebar */
+/* ===== SIDEBAR BASE ===== */
+.sidebar {
+    width: 240px;
+    background-color: #1e3a8a;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 80px; /* leave space for header */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: left 0.3s ease, opacity 0.3s ease;
+    z-index: 100;
+}
+
+/* Sidebar Links */
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background-color: #2c4db7;
+}
+
+/* Logout button */
+.sidebar .logout {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    width: calc(100% - 40px);
+    margin: 15px auto;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.sidebar .logout:hover {
+    background: #b91c1c;
+}
+
+/* ===== SIDEBAR HIDDEN STATE ===== */
+.sidebar.hidden {
+    left: -260px;
+    opacity: 0;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    display: flex;
+    transition: margin-left 0.3s ease;
+    margin-left: 240px; /* space for sidebar */
+}
+
+/* When sidebar is hidden */
+.container.full {
+    margin-left: 0;
+}
+
+/* ===== BURGER ICON ===== */
+.menu-icon {
+    font-size: 1.8rem;
+    cursor: pointer;
+    margin-right: 15px;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.menu-icon.active {
+    transform: rotate(90deg);
 }

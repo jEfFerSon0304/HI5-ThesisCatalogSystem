@@ -112,7 +112,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
         </main>
     </div>
 
-    <script>
+    <script src="script.js">
         function updateStatus(id, newStatus) {
             if (!confirm(`Are you sure you want to set this account to '${newStatus}'?`)) return;
 

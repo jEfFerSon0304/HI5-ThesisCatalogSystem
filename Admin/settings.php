@@ -100,6 +100,9 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
             <?php endif; ?>
         </main>
     </div>
+
+    <script src="script.js"></script>
+
 </body>
 
 </html>

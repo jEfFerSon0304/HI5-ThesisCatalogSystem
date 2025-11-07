@@ -85,7 +85,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 </div>
 
                 <div class="counter-card">
-                    <div class="icon-box"><img src="pictures/BORROWED.png" width="60" height="45"></div>
+                    <div class="icon-box"><img src="pictures/BORROWED.png" width="50" height="50"></div>
                     <div class="counter-details">
                         <span class="counter-title">Borrowed</span>
                         <span class="counter-value"><?php echo $borrowed; ?></span>
@@ -99,10 +99,9 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 5%;">Request #</th>
+                            <th style="width: 10%;">Request #</th>
                             <th style="width: 15%;">Student Name</th>
                             <th style="width: 35%;">Thesis Title</th>
-                            <th style="width: 20%;">Department</th>
                             <th style="width: 15%;">Date Requested</th>
                             <th style="width: 15%;">Status</th>
                         </tr>
@@ -129,7 +128,6 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                       <td>{$row['request_number']}</td>
                       <td>{$row['student_name']}</td>
                       <td>{$row['title']}</td>
-                      <td>{$row['department']}</td>
                       <td>" . date('Y-m-d', strtotime($row['request_date'])) . "</td>
                       <td style='color:$statusColor; font-weight:600;'>{$row['status']}</td>
                     </tr>
@@ -145,6 +143,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
             </section>
         </main>
     </div>
+    <script src="script.js"></script>
 </body>
 
 </html>
