@@ -99,6 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Login | CEIT Thesis Hub</title>
     <link rel="icon" type="image/png" href="pictures/Logo.png" />
     <link rel="stylesheet" href="style.css" />
+
+    <style>
+
+    </style>
 </head>
 
 <body>
@@ -111,21 +115,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form method="POST" action="">
                     <div class="input-group">
                         <input type="text" name="username" placeholder="Username or Email" required />
-                        <img src="pictures/user.png" class="icon" />
                     </div>
 
-                    <div class="input-group">
-                        <input type="password" name="password" placeholder="Password" required autocomplete="off" oncopy="return false" onpaste="return false">
-                        <img src="pictures/lock.png" class="icon" />
+                    <div class="input-group password-group">
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            required
+                            autocomplete="off"
+                            oncopy="return false"
+                            onpaste="return false">
+                        <span class="toggle-password">
+                            <img src="pictures/close-eye.png" alt="Toggle Password">
+                        </span>
                     </div>
 
-                    <div class="input-group" style="margin-bottom: 10px;">
+                    <div class="input-group select-group" style="margin-bottom: 10px;">
                         <select name="role" required>
                             <option value="" disabled selected>Select Role</option>
                             <option value="admin">Super Admin</option>
                             <option value="librarian">Librarian</option>
                         </select>
                     </div>
+
 
                     <button type="submit" class="login-btn">LOG IN</button>
                     <a href="forgot-password.php" class="forgot-link">Forgot password?</a>
@@ -141,6 +154,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </main>
+
+    <script>
+        // ✅ Password visibility toggle (fixed)
+        const passwordInput = document.querySelector('input[name="password"]');
+        const toggleSpan = document.querySelector('.toggle-password');
+        const toggleImg = toggleSpan.querySelector('img');
+
+        toggleSpan.addEventListener("click", () => {
+            const isHidden = passwordInput.getAttribute("type") === "password";
+            passwordInput.setAttribute("type", isHidden ? "text" : "password");
+            toggleImg.src = isHidden ?
+                "pictures/visible.png" // 👁️ when visible
+                :
+                "pictures/close-eye.png"; // 🙈 when hidden
+        });
+    </script>
+
+
 </body>
 
 </html>

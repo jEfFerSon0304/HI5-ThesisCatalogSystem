@@ -32,6 +32,17 @@ $conn->close();
     <link rel="icon" type="image/png" href="user-pictures/logo.png">
     <link rel="stylesheet" href="user-style.css">
 
+    <style>
+        :root {
+            --primary-blue: #0a3d91;
+            --hover-blue: #134dbb;
+            --accent-blue: #b3e5fc;
+            --bg-light: #f4f6f9;
+            --text-dark: #1a1a1a;
+            --text-light: #f5f5f5;
+            --white: #ffffff;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,6 +56,20 @@ $conn->close();
         <h1 id="thesis-title" class="details-title">
             <?php echo htmlspecialchars($thesis['title']); ?>
         </h1>
+
+        <!-- <nav>
+            <div class="logo-section">
+                <img
+                    src="user-pictures/logo.png"
+                    class="logo-circle" />
+                <div class="title">CEIT Thesis Hub</div>
+            </div>
+            <div class="nav-links">
+                <a href="home.html" class="active">HOME</a>
+                <a href="catalog.php">CATALOG</a>
+                <a href="Admin/index.php">ON DUTY?</a>
+            </div>
+        </nav> -->
 
         <section class="thesis-meta">
             <div class="meta-box">
@@ -90,7 +115,46 @@ $conn->close();
             <?php endif; ?>
             <a href="catalog.php" class="back-btn">Back to Catalog</a>
         </div>
+
     </main>
+    <footer>
+        <img src="user-pictures/logo.png" class="footer-logo" />
+        <h3>PLV CEIT THESIS CATALOG</h3>
+        <div class="footer-info">
+            <p>
+                <img
+                    src="user-pictures/location.png"
+                    class="footer-info-logo" />
+                3rd Floor, CEIT Building, Main PLV Campus, Tongco St.,
+                Maysan, Valenzuela City
+            </p>
+            <p>
+                <img
+                    src="user-pictures/email.png"
+                    class="footer-info-logo" />
+                loremipsum@plv.edu.ph
+            </p>
+            <p>
+                <img
+                    src="user-pictures/world-wide-web.png"
+                    class="footer-info-logo" />
+                plv.edu.ph
+            </p>
+        </div>
+        <div class="copyright">Copyright © 2025</div>
+    </footer>
+    <script>
+        const items = document.querySelectorAll('.meta-box, .thesis-abstract, .button-group');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeUp 0.6s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        items.forEach(i => observer.observe(i));
+    </script>
 </body>
 
 </html>

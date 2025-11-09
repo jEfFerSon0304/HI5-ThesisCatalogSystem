@@ -34,10 +34,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <title>Request Confirmation</title>
             <link rel="icon" type="image/png" href="user-pictures/logo.png">
             <link rel="stylesheet" href="user-style.css">
+
+            <style>
+                :root {
+                    --primary-blue: #0a3d91;
+                    --hover-blue: #134dbb;
+                    --accent-blue: #b3e5fc;
+                    --bg-light: #f4f6f9;
+                    --text-dark: #1a1a1a;
+                    --text-light: #f5f5f5;
+                    --white: #ffffff;
+                }
+            </style>
         </head>
 
         <body>
             <div class="confirmation-box">
+                <div class="success-icon">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" stroke="#2e7d32" stroke-width="5" fill="none" />
+                        <path d="M30 52 L45 67 L70 40" stroke="#2e7d32" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
                 <h2>Request Submitted Successfully!</h2>
                 <p class="request-number">Request Number: <?php echo $formatted_number; ?></p>
 

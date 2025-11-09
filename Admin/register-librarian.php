@@ -12,11 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password  = $_POST['password'];
     $confirm   = $_POST['confirm_password'];
 
-    // 🧩 Password match check
     if ($password !== $confirm) {
         $message = "⚠️ Passwords do not match. Please try again.";
     } else {
-        // ✅ Check if email already exists
         $checkEmail = $conn->prepare("SELECT COUNT(*) AS c FROM tbl_librarians WHERE email = ?");
         $checkEmail->bind_param("s", $email);
         $checkEmail->execute();
@@ -26,17 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "⚠️ Email already exists. Please use a different one.";
         } else {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-            // 1️⃣ Check if an active librarian already exists in this section
             $check = $conn->prepare("SELECT COUNT(*) AS c FROM tbl_librarians WHERE section=? AND status='active'");
             $check->bind_param("s", $section);
             $check->execute();
             $count = $check->get_result()->fetch_assoc()['c'];
-
-            // 2️⃣ Determine status
             $status = ($count == 0) ? 'active' : 'pending';
-
-            // 3️⃣ Insert librarian record
             $insert = $conn->prepare("
                 INSERT INTO tbl_librarians (fullname, email, password, section, status)
                 VALUES (?, ?, ?, ?, ?)
@@ -46,11 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($insert->execute()) {
                 if ($status === 'active') {
-                    $message = "✅ Registration successful! You are now an active librarian.";
                     header("Location: index.php");
                     exit();
                 } else {
-                    $message = "🕓 Registration submitted. Awaiting admin approval.";
                     header("Location: ../home.html");
                     exit();
                 }
@@ -70,41 +60,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Librarian Registration</title>
     <link rel="icon" type="image/png" href="pictures/Logo.png">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <main class="login-main">
-        <div class="login-container">
-            <div class="login-box">
-                <img src="pictures/Logo.png" alt="CEIT Logo" class="logo">
-                <h2>Librarian Registration</h2>
-                <form method="POST" action="">
-                    <div class="input-group">
-                        <input type="text" name="firstname" placeholder="First Name" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" name="lastname" placeholder="Last Name" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="email" name="email" placeholder="Email Address" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" name="section" placeholder="Section (e.g., BSIT-3A)" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="password" name="password" placeholder="Password" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
-                    </div>
-                    <button type="submit" class="login-btn">Register</button>
-                </form>
-                <?php if (!empty($message)) echo "<p style='margin-top:10px;'>$message</p>"; ?>
-                <p style="margin-top:15px;"><a href="index.php">Back to Login</a></p>
+    <button id="themeToggle">🌙</button>
+
+    <div class="register-container">
+        <img src="pictures/Logo.png" alt="CEIT Logo">
+        <h2>Librarian Registration</h2>
+
+        <form method="POST" action="">
+            <div class="name-group">
+                <input type="text" name="firstname" placeholder="First Name" required>
+                <input type="text" name="lastname" placeholder="Last Name" required>
             </div>
+
+            <input type="text" name="section" placeholder="Section" required>
+            <input type="email" name="email" placeholder="Email Address" required>
+
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+            <div class="password-rules">
+                <strong>Password must:</strong><br>
+                • Be at least 8 characters long<br>
+                • Contain one uppercase letter<br>
+                • Contain one lowercase letter<br>
+                • Contain one number or symbol
+            </div>
+
+            <button type="submit" class="login-btn">Register</button>
+        </form>
+
+        <?php if (!empty($message)) echo "<p class='message'>$message</p>"; ?>
+
+        <div class="footer-link">
+            <a href="index.php">← Back to Login</a>
         </div>
-    </main>
+    </div>
+
+    <script>
+        // Password visibility toggle
+        const passwordInput = document.querySelector('input[name="password"]');
+        const passwordIcon = document.querySelector('.input-group img.icon');
+
+        passwordIcon.addEventListener("click", () => {
+            const isHidden = passwordInput.getAttribute("type") === "password";
+            passwordInput.setAttribute("type", isHidden ? "text" : "password");
+            passwordIcon.src = isHidden ? "pictures/eye.png" : "pictures/lock.png"; // make sure you have an eye icon
+        });
+    </script>
 </body>
 
 </html>
