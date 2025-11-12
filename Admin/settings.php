@@ -190,6 +190,16 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                     </ul>
                 </section> -->
             <?php endif; ?>
+
+            <!-- 📰 ANNOUNCEMENTS MANAGEMENT -->
+            <section class="settings-category">
+                <h3>📰 Manage Announcements</h3>
+                <ul>
+                    <li><a href="manage-announcements.php">Add Announcement</a></li>
+                </ul>
+            </section>
+
+
         </main>
     </div>
 

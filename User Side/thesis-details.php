@@ -65,7 +65,7 @@ $conn->close();
                 <div class="title">CEIT Thesis Hub</div>
             </div>
             <div class="nav-links">
-                <a href="home.html" class="active">HOME</a>
+                <a href="home.php" class="active">HOME</a>
                 <a href="catalog.php">CATALOG</a>
                 <a href="Admin/index.php">ON DUTY?</a>
             </div>

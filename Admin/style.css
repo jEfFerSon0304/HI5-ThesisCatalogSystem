@@ -535,6 +535,7 @@ body.dark-mode #themeToggle {
    ======================================================= */
 
 /* ===== SIDEBAR BASE ===== */
+
 .sidebar {
     width: 240px;
     background: linear-gradient(180deg, #0a3d91, #153fa3);
@@ -547,7 +548,7 @@ body.dark-mode #themeToggle {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: left 0.35s ease, opacity 0.35s ease, background 0.4s ease;
+    transition: left 0.35s ease-in-out, opacity 0.35s ease, background 0.4s ease;
     z-index: 100;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
 }
@@ -1297,4 +1298,629 @@ body.dark-mode .request-table th {
 body.dark-mode .modal-content-1 {
     background: rgba(30, 35, 50, 0.95);
     color: #f1f1f1;
+}
+
+/* =======================================================
+   📚 MANAGE THESIS PAGE
+   ======================================================= */
+/* =======================================================
+   📚 MANAGE THESIS PAGE (Modern Minimalist Redesign)
+   ======================================================= */
+
+.thesis-overview {
+    background: #fff;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* Title */
+.section-title {
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: #0a3d91;
+
+    margin-bottom: 14px;
+}
+
+/* Centered Add Button */
+.add-thesis-center {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.add-btn-header {
+    background: #0a3d91;
+    color: #fff;
+    border: none;
+    padding: 20px 30px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 10px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.add-btn-header:hover {
+    background: #153fa3;
+    transform: translateY(-1px);
+}
+
+/* Control Bar */
+.table-controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px 20px;
+    background: #f8faff;
+    border: 1px solid #e0e6f5;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.controls-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* =======================================================
+   🎚 FILTER DROPDOWN — Modern Minimalist Style
+   ======================================================= */
+/* =======================================================
+   🎛 FILTER BUTTON
+   ======================================================= */
+
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.thesis-filter-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: #ffffff;
+    border: 1px solid #e3e8f5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+    min-width: 230px;
+}
+
+.thesis-filter-menu.visible {
+    display: flex;
+}
+
+#filterToggleBtn {
+    background: #eaf1ff;
+    color: #0a3d91;
+    border: 1px solid #cdd9f8;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#filterToggleBtn:hover {
+    background: #dce7ff;
+    border-color: #b9c9f5;
+    transform: translateY(-1px);
+}
+
+#filterToggleBtn:active {
+    transform: scale(0.98);
+}
+
+#filterToggleBtn::after {
+    content: "▼";
+    font-size: 0.65rem;
+    margin-left: 6px;
+    transition: transform 0.2s ease;
+}
+
+#filterToggleBtn.active::after {
+    transform: rotate(-180deg);
+}
+
+.thesis-filter-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: #ffffff;
+    border: 1px solid #e3e8f5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+    min-width: 230px;
+}
+
+.thesis-filter-menu.visible {
+    display: flex;
+}
+
+/* Group separation */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: #0a3d91;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+}
+
+/* Divider line between sections */
+.thesis-filter-menu hr {
+    border: none;
+    height: 1px;
+    background: #edf1fa;
+    margin: 8px 0;
+}
+
+/* Checkbox rows */
+.thesis-filter-menu label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #333;
+    padding: 6px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.thesis-filter-menu label:hover {
+    background: #f5f8ff;
+    color: #0a3d91;
+}
+
+/* Checkboxes */
+.thesis-filter-menu input[type="checkbox"] {
+    accent-color: #0a3d91;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* Subtle appear animation */
+@keyframes fadeInFilter {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Search */
+#searchInput {
+    padding: 10px 14px;
+    width: 260px;
+    border: 1px solid #ccd6eb;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+#searchInput:focus {
+    border-color: #0a3d91;
+    box-shadow: 0 0 0 3px rgba(10, 61, 145, 0.1);
+    outline: none;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #0a3d91;
+}
+
+.pagination button {
+    background: #fff;
+    border: 1px solid #ccd6eb;
+    border-radius: 6px;
+    padding: 6px 9px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination button:hover {
+    background: #e9f0ff;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e3e8f5;
+}
+
+th,
+td {
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 0.93rem;
+    border-bottom: 1px solid #f1f3f8;
+}
+
+th {
+    background: #0a3d91;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+tr:hover td {
+    background: #f9fbff;
+}
+
+/* Buttons inside table */
+.action-btn {
+    border: none;
+    padding: 7px 13px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.edit-btn {
+    background: #0a3d91;
+}
+
+.edit-btn:hover {
+    background: #153fa3;
+    transform: translateY(-1px);
+}
+
+/* =======================================================
+   🧾 ADD THESIS PAGE
+   ======================================================= */
+.add-thesis-page {
+    background: #fff;
+    padding: 30px 35px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.add-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #0a3d91;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.back-btn:hover {
+    color: #153fa3;
+}
+
+.add-thesis-form .form-group {
+    margin-bottom: 16px;
+}
+
+.add-thesis-form label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.add-thesis-form input,
+.add-thesis-form select,
+.add-thesis-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccd6eb;
+    border-radius: 8px;
+    font-size: 0.93rem;
+    background: #fff;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.add-thesis-form input:focus,
+.add-thesis-form select:focus,
+.add-thesis-form textarea:focus {
+    border-color: #0a3d91;
+    box-shadow: 0 0 0 3px rgba(10, 61, 145, 0.12);
+    outline: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.add-btn {
+    background: #0a3d91;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.add-btn:hover {
+    background: #153fa3;
+    transform: translateY(-1px);
+}
+
+/* =======================================================
+   ✨ ANIMATIONS & TRANSITIONS
+   ======================================================= */
+.fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.fade-out {
+    animation: fadeOut 0.25s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* =======================================================
+   📱 Responsive
+   ======================================================= */
+@media (max-width: 768px) {
+    .table-controls-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .controls-left,
+    .controls-right {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    #searchInput {
+        width: 100%;
+    }
+
+    .pagination {
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    .thesis-overview,
+    .add-thesis-page {
+        padding: 20px;
+    }
+}
+
+/* --- Layout fix for Add Thesis toggle --- */
+main {
+    position: relative;
+    min-height: 70vh;
+}
+
+.thesis-overview,
+.add-thesis-page {
+    width: 100%;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Force hidden sections to not occupy layout space */
+.hidden {
+    display: none !important;
+}
+
+/* =======================================================
+   🪟 EDIT THESIS MODAL — Modern Minimalist Redesign
+   ======================================================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    backdrop-filter: blur(4px);
+    animation: fadeInModal 0.3s ease;
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px 32px;
+    width: 480px;
+    max-width: 90%;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    color: #1f2937;
+    position: relative;
+    animation: slideUpModal 0.3s ease;
+}
+
+@keyframes slideUpModal {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal close button */
+.close-modal {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 1.5rem;
+    color: #555;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.close-modal:hover {
+    color: #0a3d91;
+    transform: rotate(90deg);
+}
+
+/* Form layout inside modal */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.modal-content label {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccd6eb;
+    border-radius: 8px;
+    font-size: 0.93rem;
+    background: #fff;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+    border-color: #0a3d91;
+    box-shadow: 0 0 0 3px rgba(10, 61, 145, 0.12);
+    outline: none;
+}
+
+/* Footer buttons */
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.last-updated {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.save-btn,
+.delete-btn {
+    border: none;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: white;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.save-btn {
+    background: #22c55e;
+}
+
+.save-btn:hover {
+    background: #16a34a;
+    transform: translateY(-1px);
+}
+
+.delete-btn {
+    background: #ef4444;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* Make modal responsive */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 90%;
+        padding: 24px 20px;
+    }
 }

@@ -39,7 +39,7 @@ $conn->close();
             <div class="title">CEIT Thesis Hub</div>
         </div>
         <div class="nav-links">
-            <a href="../home.html">HOME</a>
+            <a href="../home.php">HOME</a>
             <a href="catalog.php" class="active">CATALOG</a>
         </div>
     </nav>

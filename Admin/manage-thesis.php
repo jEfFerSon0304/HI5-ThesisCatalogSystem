@@ -43,37 +43,43 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
     <div class="container">
         <?php include 'sidebar.php'; ?>
 
-
         <!-- MAIN CONTENT -->
         <main>
-            <!-- TABLE SECTION -->
-            <section id="thesisOverview" class="thesis-overview fade-in">
-                <h2>Manage Thesis</h2>
-                <button id="addThesisBtn" class="add-btn-header">📄 Add New Thesis</button>
+            <!-- MANAGE THESIS CONTENT -->
+            <div id="thesisContainer">
+                <h2 class="section-title">Manage Thesis</h2>
 
-                <!-- ✅ SEARCH + FILTER + BULK TOGGLE -->
-                <!-- ✅ TABLE CONTROLS BAR -->
+                <div class="add-thesis-center">
+                    <button id="addThesisBtn" class="add-btn-header">📄 Add New Thesis</button>
+                </div>
+
+                <!-- Control Bar -->
                 <div class="table-controls-wrapper">
                     <div class="controls-left">
-                        <!-- Search Bar -->
                         <input type="text" id="searchInput" placeholder="Search by title or author...">
-
-                        <!-- Filter (with checkboxes inside dropdown) -->
                         <div class="filter-dropdown">
-                            <button type="button" id="filterToggleBtn">Filter ⏷</button>
-                            <div id="filterMenu" class="filter-menu hidden">
-                                <label><input type="checkbox" class="filter-dept" value="Information Technology"> Information Technology</label>
-                                <label><input type="checkbox" class="filter-dept" value="Civil Engineering"> Civil Engineering</label>
-                                <label><input type="checkbox" class="filter-dept" value="Electrical Engineering"> Electrical Engineering</label>
+                            <button type="button" id="filterToggleBtn">Filter</button>
+
+                            <div id="thesisFilterMenu" class="thesis-filter-menu" aria-hidden="true">
+                                <div class="filter-group">
+                                    <p class="filter-label">Department</p>
+                                    <label><input type="checkbox" name="filter-dept" class="filter-dept" value="Information Technology"> Information Technology</label>
+                                    <label><input type="checkbox" name="filter-dept" class="filter-dept" value="Civil Engineering"> Civil Engineering</label>
+                                    <label><input type="checkbox" name="filter-dept" class="filter-dept" value="Electrical Engineering"> Electrical Engineering</label>
+                                </div>
+
                                 <hr>
-                                <label><input type="checkbox" class="filter-availability" value="Available"> Available</label>
-                                <label><input type="checkbox" class="filter-availability" value="Unavailable"> Unavailable</label>
+
+                                <div class="filter-group">
+                                    <p class="filter-label">Availability</p>
+                                    <label><input type="checkbox" name="filter-availability" class="filter-availability" value="Available"> Available</label>
+                                    <label><input type="checkbox" name="filter-availability" class="filter-availability" value="Unavailable"> Unavailable</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                     <div class="controls-right">
-                        <!-- Pagination -->
                         <div class="pagination">
                             <button id="prevPage">&lt;</button>
                             <span>Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
@@ -82,6 +88,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                     </div>
                 </div>
 
+                <!-- Thesis Table -->
                 <table>
                     <thead>
                         <tr>
@@ -90,7 +97,6 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                             <th style="width: 10%;">Year</th>
                             <th style="width: 10%;">Department</th>
                             <th style="width: 15%;">Availability</th>
-                            <!-- <th>Last Updated</th> -->
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -101,7 +107,6 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                // ✅ Safely encode PHP array into valid JS object string
                                 $jsonData = json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_TAG);
                         ?>
                                 <tr data-id="<?= htmlspecialchars($row['thesis_id']) ?>">
@@ -111,9 +116,7 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                                     <td><?= htmlspecialchars($row['department']) ?></td>
                                     <td><?= htmlspecialchars($row['availability']) ?></td>
                                     <td>
-                                        <button
-                                            class="action-btn edit-btn"
-                                            onclick='openEditModal(<?= $jsonData ?>)'>
+                                        <button class="action-btn edit-btn" onclick='openEditModal(<?= $jsonData ?>)'>
                                             Edit
                                         </button>
                                     </td>
@@ -121,19 +124,22 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                         <?php
                             }
                         } else {
-                            echo "<tr><td colspan='7'>No thesis records found.</td></tr>";
+                            echo "<tr><td colspan='6'>No thesis records found.</td></tr>";
                         }
                         $conn->close();
                         ?>
                     </tbody>
-
                 </table>
-            </section>
+            </div>
 
-            <!-- ADD THESIS FORM -->
-            <section id="addThesisFormSection" class="add-thesis-section hidden fade-out">
-                <h3>Add New Thesis</h3>
-                <form id="addThesisForm" action="add_thesis.php" method="POST">
+            <!-- ADD THESIS PAGE (Hidden by default) -->
+            <section id="addThesisPage" class="add-thesis-page hidden fade-out">
+                <div class="add-header">
+                    <button id="backToThesisBtn" class="back-btn">← Back to Manage Thesis</button>
+                    <h2>Add New Thesis</h2>
+                </div>
+
+                <form id="addThesisForm" action="add_thesis.php" method="POST" class="add-thesis-form">
                     <div class="form-group">
                         <label for="title">Thesis Title</label>
                         <input type="text" id="title" name="title" required>
@@ -168,105 +174,89 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="button" id="cancelFormBtn" class="cancel-btn">CANCEL</button>
-                        <button type="submit" class="add-btn">ADD THESIS</button>
+                        <button type="submit" class="add-btn">Add Thesis</button>
                     </div>
                 </form>
             </section>
         </main>
-    </div>
 
-    <!-- EDIT MODAL (unchanged) -->
-    <div class="modal" id="editModal" style="display: none;">
-        <div class="modal-content">
-            <span class="close-modal" id="editModalCloseBtn">&times;</span>
-            <h3>Edit Thesis</h3>
-            <form id="editForm">
-                <input type="hidden" id="edit_thesis_id" name="thesis_id">
-                <div class="form-group"><label>Title</label><input type="text" id="edit_title" name="title" required></div>
-                <div class="form-group"><label>Author(s)</label><input type="text" id="edit_author" name="author" required></div>
-                <div class="form-group"><label>Year</label><input type="number" id="edit_year" name="year" required></div>
-                <div class="form-group"><label>Department</label>
-                    <select id="edit_department" name="department" required>
-                        <option value="Information Technology">Information Technology</option>
-                        <option value="Civil Engineering">Civil Engineering</option>
-                        <option value="Electrical Engineering">Electrical Engineering</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>Availability</label>
-                    <select id="edit_availability" name="availability" required>
-                        <option value="Available">Available</option>
-                        <option value="Unavailable">Unavailable</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>Abstract</label><textarea id="edit_abstract" name="abstract" rows="3"></textarea></div>
+        <!-- FILTER DROPDOWN MENU -->
+        <div id="thesisFilterMenu" class="thesis-filter-menu" aria-hidden="true">
+            <div class="filter-group">
+                <p class="filter-label">Department</p>
+                <label><input type="checkbox" name="filter-dept" class="filter-dept" value="Information Technology"> Information Technology</label>
+                <label><input type="checkbox" name="filter-dept" class="filter-dept" value="Civil Engineering"> Civil Engineering</label>
+                <label><input type="checkbox" name="filter-dept" class="filter-dept" value="Electrical Engineering"> Electrical Engineering</label>
+            </div>
 
-                <div class="modal-footer">
-                    <span class="last-updated" id="lastUpdatedText">Last Updated: —</span>
-                    <div>
-                        <button type="submit" class="save-btn">💾 Save</button>
-                        <button type="button" class="delete-btn" id="deleteBtn">🗑 Delete</button>
-                    </div>
-                </div>
-            </form>
+            <hr>
+
+            <div class="filter-group">
+                <p class="filter-label">Availability</p>
+                <label><input type="checkbox" name="filter-availability" class="filter-availability" value="Available"> Available</label>
+                <label><input type="checkbox" name="filter-availability" class="filter-availability" value="Unavailable"> Unavailable</label>
+            </div>
         </div>
+
+
+        <!-- EDIT MODAL -->
+        <div class="modal" id="editModal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal" id="editModalCloseBtn">&times;</span>
+                <h3>Edit Thesis</h3>
+                <form id="editForm">
+                    <input type="hidden" id="edit_thesis_id" name="thesis_id">
+                    <div class="form-group"><label>Title</label><input type="text" id="edit_title" name="title" required></div>
+                    <div class="form-group"><label>Author(s)</label><input type="text" id="edit_author" name="author" required></div>
+                    <div class="form-group"><label>Year</label><input type="number" id="edit_year" name="year" required></div>
+                    <div class="form-group"><label>Department</label>
+                        <select id="edit_department" name="department" required>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Availability</label>
+                        <select id="edit_availability" name="availability" required>
+                            <option value="Available">Available</option>
+                            <option value="Unavailable">Unavailable</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Abstract</label><textarea id="edit_abstract" name="abstract" rows="3"></textarea></div>
+                    <div class="modal-footer">
+                        <span class="last-updated" id="lastUpdatedText">Last Updated: —</span>
+                        <div>
+                            <button type="submit" class="save-btn">💾 Save</button>
+                            <button type="button" class="delete-btn" id="deleteBtn">🗑 Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="toastContainer" class="toast-container"></div>
     </div>
 
-    <!-- TOAST CONTAINER -->
-    <div id="toastContainer" class="toast-container"></div>
-
+    <!-- ✅ FULL FIXED SCRIPT -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            /* =========================
-               🧭 SIDEBAR TOGGLE
-            ========================= */
             const menuIcon = document.querySelector(".menu-icon");
             const sidebar = document.querySelector(".sidebar");
             const container = document.querySelector(".container");
 
-            menuIcon.addEventListener("click", () => {
-                sidebar.classList.toggle("hidden");
-                container.classList.toggle("full");
-                menuIcon.classList.toggle("active");
-
-                // Optional: change icon to "X"
-                if (menuIcon.textContent === "☰") {
-                    menuIcon.textContent = "✖";
-                } else {
-                    menuIcon.textContent = "☰";
-                }
-            });
-
-            /* =========================
-               📄 ADD THESIS SECTION TOGGLE
-            ========================= */
             const addThesisBtn = document.getElementById("addThesisBtn");
-            const addThesisFormSection = document.getElementById("addThesisFormSection");
-            const cancelFormBtn = document.getElementById("cancelFormBtn");
-            const thesisOverview = document.getElementById("thesisOverview");
+            const addThesisPage = document.getElementById("addThesisPage");
+            const backToThesisBtn = document.getElementById("backToThesisBtn");
+            const thesisContainer = document.getElementById("thesisContainer");
 
-            if (addThesisBtn && addThesisFormSection && cancelFormBtn) {
-                addThesisBtn.addEventListener("click", () => {
-                    thesisOverview.classList.add("hidden");
-                    addThesisFormSection.classList.remove("hidden");
-                });
-
-                cancelFormBtn.addEventListener("click", () => {
-                    addThesisFormSection.classList.add("hidden");
-                    thesisOverview.classList.remove("hidden");
-                });
-            }
-
-            /* =========================
-               🔍 SEARCH, FILTER & PAGINATION
-            ========================= */
             const searchInput = document.getElementById("searchInput");
-            const tableBody = document.querySelector("tbody");
-            const allRows = Array.from(tableBody.querySelectorAll("tr"));
+            const tableBody = document.querySelector("main table tbody");
+            const allRows = Array.from(tableBody ? tableBody.querySelectorAll("tr") : []).map(r => r.cloneNode(true));
+
             const filterToggleBtn = document.getElementById("filterToggleBtn");
-            const filterMenu = document.getElementById("filterMenu");
-            const filterDept = document.querySelectorAll(".filter-dept");
-            const filterAvail = document.querySelectorAll(".filter-availability");
+            const filterMenu = document.getElementById("thesisFilterMenu");
+            const filterDept = Array.from(document.querySelectorAll(".filter-dept"));
+            const filterAvail = Array.from(document.querySelectorAll(".filter-availability"));
             const prevPage = document.getElementById("prevPage");
             const nextPage = document.getElementById("nextPage");
             const currentPageDisplay = document.getElementById("currentPage");
@@ -275,93 +265,164 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
             let currentPage = 1;
             const rowsPerPage = 10;
 
-            // Filter dropdown toggle
+            /* Sidebar toggle */
+            if (menuIcon) {
+                menuIcon.addEventListener("click", () => {
+                    sidebar.classList.toggle("hidden");
+                    container.classList.toggle("full");
+                    menuIcon.textContent = menuIcon.textContent.trim() === "☰" ? "✖" : "☰";
+                });
+            }
+
+            /* Add Thesis toggle */
+            if (addThesisBtn && addThesisPage && thesisContainer) {
+                addThesisBtn.addEventListener("click", () => {
+                    thesisContainer.classList.add("hidden");
+                    addThesisPage.classList.remove("hidden");
+                    addThesisPage.classList.remove("fade-out");
+                    addThesisPage.classList.add("fade-in");
+                    hideFilterMenu();
+                    addThesisPage.scrollIntoView({
+                        behavior: "smooth"
+                    });
+                });
+            }
+
+            if (backToThesisBtn && thesisContainer && addThesisPage) {
+                backToThesisBtn.addEventListener("click", () => {
+                    addThesisPage.classList.add("fade-out");
+                    setTimeout(() => {
+                        addThesisPage.classList.add("hidden");
+                        thesisContainer.classList.remove("hidden");
+                        thesisContainer.classList.add("fade-in");
+                        thesisContainer.scrollIntoView({
+                            behavior: "smooth"
+                        });
+                    }, 220);
+                });
+            }
+
+            /* Filter menu logic — anchored dropdown version */
             if (filterToggleBtn && filterMenu) {
-                filterToggleBtn.addEventListener("click", () => {
-                    filterMenu.classList.toggle("hidden");
+                // Toggle visibility when clicking the Filter button
+                filterToggleBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    filterMenu.classList.toggle("visible");
+                    filterToggleBtn.classList.toggle("active");
                 });
 
-                document.addEventListener("click", (e) => {
-                    if (!filterToggleBtn.contains(e.target) && !filterMenu.contains(e.target)) {
-                        filterMenu.classList.add("hidden");
+                // Close dropdown when clicking outside
+                document.addEventListener("click", (ev) => {
+                    if (!filterToggleBtn.contains(ev.target) && !filterMenu.contains(ev.target)) {
+                        filterMenu.classList.remove("visible");
+                        filterToggleBtn.classList.remove("active");
                     }
                 });
             }
 
-            // Apply filters and search
-            function filterAndRender() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const selectedDepts = Array.from(filterDept)
-                    .filter(chk => chk.checked)
-                    .map(chk => chk.value);
-                const selectedAvail = Array.from(filterAvail)
-                    .filter(chk => chk.checked)
-                    .map(chk => chk.value);
 
-                let filtered = allRows.filter(row => {
-                    const title = row.children[0].textContent.toLowerCase();
-                    const author = row.children[1].textContent.toLowerCase();
-                    const dept = row.children[3].textContent;
-                    const availability = row.children[4].textContent;
+            /* Search + Filter + Pagination */
+            function getSelectedValues(nodeList) {
+                return nodeList.filter(chk => chk.checked).map(chk => chk.value);
+            }
 
-                    const matchesSearch = title.includes(searchTerm) || author.includes(searchTerm);
+            function applySearchAndFilters() {
+                currentPage = 1;
+                renderFiltered();
+            }
+
+            function renderFiltered() {
+                const searchTerm = (searchInput?.value || "").toLowerCase().trim();
+                const selectedDepts = getSelectedValues(filterDept);
+                const selectedAvail = getSelectedValues(filterAvail);
+
+                const filtered = allRows.filter(row => {
+                    const cells = row.querySelectorAll("td");
+                    if (!cells || cells.length === 0) return false;
+                    const title = (cells[0].textContent || "").toLowerCase();
+                    const author = (cells[1].textContent || "").toLowerCase();
+                    const dept = (cells[3].textContent || "").trim();
+                    const availability = (cells[4].textContent || "").trim();
+
+                    const matchesSearch = !searchTerm || title.includes(searchTerm) || author.includes(searchTerm);
                     const matchesDept = selectedDepts.length === 0 || selectedDepts.includes(dept);
                     const matchesAvail = selectedAvail.length === 0 || selectedAvail.includes(availability);
-
                     return matchesSearch && matchesDept && matchesAvail;
                 });
 
-                renderTable(filtered);
+                renderPage(filtered);
             }
 
-            function renderTable(filteredRows) {
-                const totalPages = Math.ceil(filteredRows.length / rowsPerPage) || 1;
-                currentPage = Math.min(currentPage, totalPages);
+            function renderPage(filteredRows) {
+                const totalPages = Math.max(1, Math.ceil(filteredRows.length / rowsPerPage));
+                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage < 1) currentPage = 1;
+
                 const start = (currentPage - 1) * rowsPerPage;
                 const end = start + rowsPerPage;
                 const pageRows = filteredRows.slice(start, end);
 
                 tableBody.innerHTML = "";
-                pageRows.forEach(row => tableBody.appendChild(row));
+                if (pageRows.length === 0) {
+                    const tr = document.createElement("tr");
+                    const td = document.createElement("td");
+                    td.colSpan = 6;
+                    td.style.textAlign = "center";
+                    td.style.color = "gray";
+                    td.textContent = "No thesis records found.";
+                    tr.appendChild(td);
+                    tableBody.appendChild(tr);
+                } else {
+                    pageRows.forEach(row => tableBody.appendChild(row.cloneNode(true)));
+                }
 
                 currentPageDisplay.textContent = currentPage;
                 totalPagesDisplay.textContent = totalPages;
-
                 prevPage.disabled = currentPage === 1;
                 nextPage.disabled = currentPage === totalPages;
             }
 
-            if (searchInput) {
-                searchInput.addEventListener("input", () => {
-                    currentPage = 1;
-                    filterAndRender();
+            // 🔹 NEW: Single-selection filter setup
+            function setupSingleSelectFilters() {
+                const deptFilters = document.querySelectorAll('.filter-dept');
+                const availFilters = document.querySelectorAll('.filter-availability');
+
+                deptFilters.forEach(chk => {
+                    chk.addEventListener('change', () => {
+                        if (chk.checked) deptFilters.forEach(other => {
+                            if (other !== chk) other.checked = false;
+                        });
+                        applySearchAndFilters();
+                    });
+                });
+
+                availFilters.forEach(chk => {
+                    chk.addEventListener('change', () => {
+                        if (chk.checked) availFilters.forEach(other => {
+                            if (other !== chk) other.checked = false;
+                        });
+                        applySearchAndFilters();
+                    });
                 });
             }
 
-            [...filterDept, ...filterAvail].forEach(chk => {
-                chk.addEventListener("change", () => {
-                    currentPage = 1;
-                    filterAndRender();
-                });
-            });
+            if (searchInput) searchInput.addEventListener("input", applySearchAndFilters);
+            setupSingleSelectFilters();
 
-            prevPage.addEventListener("click", () => {
+            if (prevPage) prevPage.addEventListener("click", () => {
                 if (currentPage > 1) {
                     currentPage--;
-                    filterAndRender();
+                    renderFiltered();
                 }
             });
-
-            nextPage.addEventListener("click", () => {
+            if (nextPage) nextPage.addEventListener("click", () => {
                 currentPage++;
-                filterAndRender();
+                renderFiltered();
             });
+            renderFiltered();
 
-            filterAndRender(); // initial load
 
-            /* =========================
-               ✏️ EDIT MODAL FUNCTIONS
-            ========================= */
+            /* Modal */
             const editModal = document.getElementById("editModal");
             const editModalCloseBtn = document.getElementById("editModalCloseBtn");
             const editForm = document.getElementById("editForm");
@@ -369,88 +430,80 @@ $displayName = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : $_SESSION[
             const toastContainer = document.getElementById("toastContainer");
 
             window.openEditModal = function(data) {
-                document.getElementById("edit_thesis_id").value = data.thesis_id;
-                document.getElementById("edit_title").value = data.title;
-                document.getElementById("edit_author").value = data.author;
-                document.getElementById("edit_year").value = data.year;
-                document.getElementById("edit_department").value = data.department;
-                document.getElementById("edit_availability").value = data.availability;
+                try {
+                    if (typeof data === "string") data = JSON.parse(data);
+                } catch {}
+                document.getElementById("edit_thesis_id").value = data.thesis_id || "";
+                document.getElementById("edit_title").value = data.title || "";
+                document.getElementById("edit_author").value = data.author || "";
+                document.getElementById("edit_year").value = data.year || "";
+                document.getElementById("edit_department").value = data.department || "";
+                document.getElementById("edit_availability").value = data.availability || "";
                 document.getElementById("edit_abstract").value = data.abstract || "";
                 document.getElementById("lastUpdatedText").textContent = "Last Updated: " + (data.last_updated || "—");
                 editModal.style.display = "flex";
             };
 
-            function closeModal() {
-                editModal.style.display = "none";
+            function closeEditModal() {
+                if (editModal) editModal.style.display = "none";
             }
-
-            if (editModalCloseBtn) {
-                editModalCloseBtn.addEventListener("click", closeModal);
-            }
-
-            window.addEventListener("click", (e) => {
-                if (e.target === editModal) closeModal();
+            if (editModalCloseBtn) editModalCloseBtn.addEventListener("click", closeEditModal);
+            window.addEventListener("click", ev => {
+                if (ev.target === editModal) closeEditModal();
             });
 
-            // Save edits
             if (editForm) {
-                editForm.addEventListener("submit", (e) => {
-                    e.preventDefault();
-
+                editForm.addEventListener("submit", ev => {
+                    ev.preventDefault();
                     const formData = new FormData(editForm);
                     fetch("update_thesis.php", {
                             method: "POST",
                             body: formData
                         })
-                        .then(res => res.text())
+                        .then(r => r.text())
                         .then(msg => {
-                            showToast(msg, "success");
-                            closeModal();
-                            setTimeout(() => location.reload(), 800);
+                            showToast(msg || "Updated successfully", "success");
+                            closeEditModal();
+                            setTimeout(() => location.reload(), 700);
                         })
                         .catch(() => showToast("Error updating thesis.", "error"));
                 });
             }
 
-            // Delete thesis
             if (deleteBtn) {
                 deleteBtn.addEventListener("click", () => {
                     const thesisId = document.getElementById("edit_thesis_id").value;
+                    if (!thesisId) return showToast("Missing thesis id", "error");
                     if (!confirm("Are you sure you want to delete this thesis?")) return;
-
                     fetch("delete_thesis.php", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/x-www-form-urlencoded"
                             },
-                            body: `thesis_id=${thesisId}`
-                        })
-                        .then(res => res.text())
+                            body: `thesis_id=${encodeURIComponent(thesisId)}`
+                        }).then(r => r.text())
                         .then(msg => {
-                            showToast(msg, "info");
-                            closeModal();
-                            setTimeout(() => location.reload(), 800);
+                            showToast(msg || "Deleted", "info");
+                            closeEditModal();
+                            setTimeout(() => location.reload(), 700);
                         })
                         .catch(() => showToast("Error deleting thesis.", "error"));
                 });
             }
 
-            /* =========================
-               🔔 TOAST FUNCTION
-            ========================= */
-            function showToast(message, type = "info") {
+            function showToast(message, type = "info", duration = 2500) {
                 const toast = document.createElement("div");
                 toast.className = `toast ${type}`;
                 toast.textContent = message;
                 toastContainer.appendChild(toast);
-
                 setTimeout(() => {
-                    toast.remove();
-                }, 2500);
+                    toast.style.opacity = "0";
+                    toast.style.transform = "translateX(10px)";
+                    setTimeout(() => toast.remove(), 250);
+                }, duration);
             }
         });
     </script>
-
 </body>
 
 </html>
